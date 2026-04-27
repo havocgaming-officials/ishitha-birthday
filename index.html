@@ -12,8 +12,7 @@
 /* LOCKSCREEN */
 #lockscreen {
   position: fixed;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
   display: flex;
   justify-content: center;
@@ -28,7 +27,7 @@
   text-align: center;
 }
 
-/* BODY */
+/* BODY FIXED */
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
@@ -37,12 +36,11 @@ body {
   scroll-behavior: smooth;
 }
 
-/* ❤️ HEARTS (FIXED: BACKGROUND ONLY) */
+/* HEARTS BACKGROUND ONLY */
 .hearts {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  overflow: hidden;
   z-index: 0;
 }
 
@@ -54,29 +52,42 @@ body {
 }
 
 @keyframes floatUp {
-  0% { transform: translateY(0) scale(1); opacity: 0; }
+  0% { transform: translateY(0); opacity: 0; }
   10% { opacity: 1; }
-  100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+  100% { transform: translateY(-110vh); opacity: 0; }
 }
 
-/* ENVELOPE */
+/* ENVELOPE CENTERED & REALISTIC */
 #landing {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  position: relative;
-  z-index: 2;
 }
 
 .envelope {
-  width: 200px;
-  height: 130px;
-  background: linear-gradient(135deg, #ff8fab, #ff6f91);
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  width: 220px;
+  height: 140px;
+  background: linear-gradient(145deg, #ff6f91, #ff8fab);
+  position: relative;
+  border-radius: 10px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
   cursor: pointer;
+  transform: perspective(600px) rotateX(10deg);
+}
+
+/* flap */
+.envelope::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 110px solid transparent;
+  border-right: 110px solid transparent;
+  border-top: 70px solid #ffb3c6;
 }
 
 /* SECTIONS */
@@ -91,7 +102,7 @@ body {
   transition: 1s ease;
   padding: 30px;
   position: relative;
-  z-index: 2; /* ABOVE HEARTS */
+  z-index: 2;
 }
 
 .section.show {
@@ -106,7 +117,7 @@ img {
   border-radius: 24px;
   box-shadow: 0 15px 40px rgba(0,0,0,0.25);
   transform: scale(1.05);
-  transition: transform 2s ease;
+  transition: 2s ease;
 }
 
 .section.show img {
@@ -115,7 +126,7 @@ img {
 
 /* CAPTION */
 .caption {
-  margin-top: 18px;
+  margin-top: 15px;
   text-align: center;
   font-size: 18px;
   color: rgba(0,0,0,0.7);
@@ -128,7 +139,7 @@ img {
 }
 
 .letter-box {
-  background: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.9);
   padding: 25px;
   border-radius: 20px;
   max-width: 90%;
@@ -147,7 +158,6 @@ img {
 
 <body>
 
-<!-- HEARTS -->
 <div class="hearts"></div>
 
 <!-- LOCK -->
@@ -161,11 +171,11 @@ img {
 
 <!-- ENVELOPE -->
 <div id="landing">
-  <h1>For Ishitha ❤️</h1>
   <div class="envelope" onclick="start()"></div>
+  <p>Tap the envelope 💌</p>
 </div>
 
-<!-- MUSIC -->
+<!-- MUSIC (Waalian) -->
 <iframe id="music" width="0" height="0"
 src="https://www.youtube.com/embed/rCoPr8UwRMc?enablejsapi=1"
 frameborder="0"></iframe>
@@ -183,31 +193,29 @@ frameborder="0"></iframe>
 <!-- FINAL -->
 <div id="final" class="section">
   <p>
-    Happy Birthday, Ishitha ❤️<br><br>
-    Forever yours,<br>
-    ~ Your Loving Husband
+    Happy Birthday Ishitha ❤️<br><br>
+    Forever yours<br>
+    ~ Your person
   </p>
 </div>
 
 <script>
 
-/* ❤️ HEARTS */
+/* HEARTS */
 function createHearts(){
-  const hearts = document.querySelector(".hearts");
-
-  for(let i=0;i<30;i++){
-    const s = document.createElement("span");
-    s.innerHTML = "❤️";
-    s.style.left = Math.random()*100 + "vw";
-    s.style.animationDuration = (6 + Math.random()*6) + "s";
-    s.style.fontSize = (10 + Math.random()*20) + "px";
-    hearts.appendChild(s);
+  const h = document.querySelector(".hearts");
+  for(let i=0;i<25;i++){
+    const s=document.createElement("span");
+    s.innerHTML="❤️";
+    s.style.left=Math.random()*100+"vw";
+    s.style.animationDuration=(6+Math.random()*6)+"s";
+    h.appendChild(s);
   }
 }
 createHearts();
 
-/* DATA */
-const captions = [
+/* STORY */
+const captions=[
 "Where it all started… ❤️",
 "A beginning we didn’t understand yet",
 "Slowly… you became important",
@@ -224,197 +232,63 @@ const captions = [
 "Our forever starts here"
 ];
 
-const story = document.getElementById("story");
+const story=document.getElementById("story");
 
-/* BUILD STORY */
 for(let i=1;i<=14;i++){
-  const div = document.createElement("div");
-  div.className = "section";
-
-  div.innerHTML = `
-    <img src="img${i}.jpg">
-    <div class="caption">${captions[i-1]}</div>
-  `;
-
-  story.appendChild(div);
+  const d=document.createElement("div");
+  d.className="section";
+  d.innerHTML=`<img src="img${i}.jpg"><div class="caption">${captions[i-1]}</div>`;
+  story.appendChild(d);
 }
 
-let musicStarted = false;
+let musicStarted=false;
 
-/* FLOW CONTROL */
+/* START */
 function start(){
-  document.getElementById("landing").style.display = "none";
+  document.getElementById("lockscreen").style.display="none";
+
+  // start music immediately after password
+  const music=document.getElementById("music");
+  music.src+="&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
+
   startFlow();
 }
 
-/* MAIN SEQUENCE */
+/* FLOW */
 function startFlow(){
-  const sections = document.querySelectorAll(".section");
-
-  let i = 0;
+  const sec=document.querySelectorAll(".section");
+  let i=0;
 
   function next(){
-
-    // STOP AFTER IMAGES (last 2 sections are letter + final)
-    if(i >= sections.length - 2){
+    if(i>=sec.length-2){
       startLetter();
       return;
     }
 
-    sections[i].classList.add("show");
-
-    sections[i].scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-
-    if(i === 0 && !musicStarted){
-      document.getElementById("music").src += "&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
-      musicStarted = true;
-    }
+    sec[i].classList.add("show");
+    sec[i].scrollIntoView({behavior:"smooth",block:"center"});
 
     i++;
-
-    setTimeout(next, 5000);
+    setTimeout(next,5000);
   }
 
   next();
 }
 
 /* LETTER */
-const message = `Happy 20th Birthday, my love ❤️
+const msg=`YOUR FULL MESSAGE HERE`;
 
-Another year, another chapter…
-and somehow, every time I sit to write for you,
-it feels like words still fall short.
-
-But today, I’ll try again—
-because you deserve to hear it, again and again.
-
-It still feels like yesterday—
-grade eight,
-that moment when you walked into the class…
-and unknowingly walked straight into my heart.
-
-That one "May I come in, ma’am?"
-still echoes somewhere inside me.
-
-I didn’t realize then
-that this simple moment
-would turn into a story so deep,
-so real,
-and so ours.
-
-From being those two innocent kids
-stealing glances…
-
-to becoming "us" after class nine…
-
-we’ve lived through everything—
-distance, silence, misunderstandings, pain…
-
-and yet,
-somehow,
-love always found its way back stronger.
-
-People say love fades with time,
-but what we have…
-
-it grew through every storm we faced.
-
-We were never perfect—
-but maybe that’s what made us real.
-
-When distance came,
-we learned how to feel without seeing.
-
-When silence came,
-our eyes spoke louder than words ever could.
-
-When things broke,
-we didn’t leave—
-we held on tighter.
-
-And that’s what makes us different.
-
-You’ve been so many things in my life—
-my girl, my peace, my strength.
-
-Sometimes you cared for me
-like no one else ever could…
-
-like I had a home in you.
-
-And somewhere along the way,
-that little girl from grade eight
-became my whole world.
-
-I know the journey hasn’t been easy for you.
-
-I’ve seen your pain,
-your struggles,
-the silent battles you’ve fought.
-
-And still,
-you stayed.
-Still, you loved.
-Still, you held my hand
-when it wasn’t easy.
-
-That strength of yours…
-I respect it more than I can ever express.
-
-This year,
-I don’t want you to carry any of the old pain with you.
-
-Let it go.
-Burn every memory that hurt you.
-
-You deserve a life
-that feels light, peaceful, and full of happiness.
-
-You deserve to smile without a reason,
-to live without fear,
-to love without holding back.
-
-I may not always be able to give you everything…
-
-but I promise you this—
-
-I’ll always give you
-my heart, my loyalty, and my presence.
-
-And I’ll keep proving, every day,
-that your trust in me was never wrong.
-
-"पानी में पत्थर मत फेंका करो, उसे भी कोई पीता है…  
-मरने की बात मत किया करो, तुम्हें देख कर भी कोई जीता है…"
-
-You are that reason someone lives.
-You are my reason.
-
-Happy Birthday, Ishitha.
-Happy 20th, my love ❤️
-
-Live it fully,
-smile endlessly,
-
-and never forget—
-you matter to me more than anything in this world.`;
-
-let i = 0;
+let i=0;
 
 function typeLetter(){
-  if(i < message.length){
-    document.getElementById("typedText").innerHTML += message.charAt(i++);
-    setTimeout(typeLetter, 18);
+  if(i<msg.length){
+    document.getElementById("typedText").innerHTML+=msg[i++];
+    setTimeout(typeLetter,18);
   } else {
-    setTimeout(() => {
+    setTimeout(()=>{
       document.getElementById("final").classList.add("show");
-      document.getElementById("final").scrollIntoView({
-        behavior: "smooth"
-      });
-    }, 800);
+      document.getElementById("final").scrollIntoView({behavior:"smooth"});
+    },1000);
   }
 }
 
@@ -425,8 +299,8 @@ function startLetter(){
 
 /* PASSWORD */
 function unlock(){
-  if(document.getElementById("passwordInput").value === "180110"){
-    document.getElementById("lockscreen").style.display = "none";
+  if(document.getElementById("passwordInput").value==="180110"){
+    document.getElementById("lockscreen").style.display="none";
   }
 }
 
