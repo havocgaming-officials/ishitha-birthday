@@ -209,8 +209,10 @@ const story = document.getElementById("story");
 let started = false;
 let index = 0;
 let musicStarted = false;
+let autoMode = true;
+let timer = null;
 
-/* CREATE SECTIONS (HIDDEN INITIALLY) */
+/* BUILD STORY */
 for(let i=1;i<=14;i++){
   const div = document.createElement("div");
   div.className = "section";
@@ -229,10 +231,63 @@ function start(){
   started = true;
 
   reveal();
-  autoReveal();
+  startAuto();
 }
 
-/* SCROLL ALLOWED */
+/* MUSIC */
+function playMusicOnce(){
+  if(!musicStarted){
+    document.getElementById("music").src += "&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
+    musicStarted = true;
+  }
+}
+
+/* REVEAL LOGIC */
+function revealNext(){
+  const sections = document.querySelectorAll(".section");
+
+  if(index >= sections.length){
+    startLetter();
+    return;
+  }
+
+  sections[index].classList.add("show");
+
+  if(index === 0){
+    playMusicOnce();
+  }
+
+  index++;
+}
+
+/* AUTO SCROLL (5 sec) */
+function startAuto(){
+  timer = setInterval(() => {
+    if(autoMode){
+      revealNext();
+    }
+  }, 5000);
+}
+
+/* PAUSE AUTO WHEN USER TOUCHES */
+function pauseAuto(){
+  autoMode = false;
+  clearTimeout(timer);
+
+  setTimeout(() => {
+    autoMode = true;
+  }, 2500);
+}
+
+/* TAP ANYWHERE */
+document.addEventListener("click", () => {
+  if(started){
+    revealNext();
+    pauseAuto();
+  }
+});
+
+/* SCROLL TRIGGER */
 function reveal(){
   if(!started) return;
 
@@ -245,31 +300,26 @@ function reveal(){
 
 window.addEventListener("scroll", reveal);
 
-/* AUTO IMAGE REVEAL */
-function autoReveal(){
-  const sections = document.querySelectorAll(".section");
-
-  if(index >= sections.length){
-    triggerLetter();
-    return;
-  }
-
-  sections[index].classList.add("show");
-
-  /* MUSIC ON FIRST IMAGE */
-  if(index === 0 && !musicStarted){
-    document.getElementById("music").src += "&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
-    musicStarted = true;
-  }
-
-  index++;
-
-  setTimeout(autoReveal, 5000);
-}
-
-/* LETTER */
-function triggerLetter(){
+/* LETTER TYPEWRITER (UNCHANGED BEHAVIOR) */
+function startLetter(){
   document.getElementById("letter").classList.add("show");
+
+  const text = document.getElementById("typedText").innerText;
+  document.getElementById("typedText").innerText = "";
+
+  let i = 0;
+
+  function type(){
+    if(i < text.length){
+      document.getElementById("typedText").innerHTML += text.charAt(i);
+      i++;
+      setTimeout(type, 18);
+    } else {
+      document.getElementById("final").classList.add("show");
+    }
+  }
+
+  type();
 }
 
 /* PASSWORD */
