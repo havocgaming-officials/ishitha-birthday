@@ -3,71 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>For Ishitha ❤️</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins&family=Playfair+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
 
-  /* 🔒 Lock Screen */
+/* 🌌 Base */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at top, #ffe4ec, #e6d6ff 70%);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* subtle grain */
+body::after {
+  content: "";
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  background-image: radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.15;
+  animation: moveBg 30s linear infinite;
+  z-index: -1;
+}
+
+@keyframes moveBg {
+  from { transform: translate(0,0); }
+  to { transform: translate(-200px,-200px); }
+}
+
+/* 🔒 Lock */
 #lockscreen {
   position: fixed;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
+  inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  background: radial-gradient(circle, #ffd6e0, #e6d6ff);
+  z-index: 999;
 }
 
 .lock-box {
-  background: white;
-  padding: 30px;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(20px);
+  padding: 35px;
   border-radius: 20px;
   text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
 
 .lock-box input {
-  padding: 10px;
   margin-top: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
   width: 80%;
-  border-radius: 10px;
 }
 
 .lock-box button {
   margin-top: 15px;
   padding: 10px 20px;
   border: none;
-  background: #ff8fab;
+  border-radius: 25px;
+  background: linear-gradient(135deg,#ff8fab,#ff5d8f);
   color: white;
-  border-radius: 20px;
-}
-  
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
-  overflow-x: hidden;
 }
 
-/* 🎬 Envelope Intro */
+/* 🎬 Landing */
 #landing {
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  text-align: center;
+  transition: opacity .6s ease;
 }
 
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  margin-bottom: 30px;
+}
+
+/* ✉️ Envelope */
 .envelope {
-  width: 200px;
-  height: 130px;
-  background: #ff8fab;
+  width: 220px;
+  height: 140px;
+  background: linear-gradient(145deg,#ff8fab,#ffc2d1);
+  border-radius: 14px;
   position: relative;
   cursor: pointer;
-  border-radius: 10px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+  animation: float 4s ease-in-out infinite;
+  transition: transform .4s ease;
+}
+
+.envelope:hover {
+  transform: scale(1.05);
 }
 
 .envelope::before {
@@ -75,16 +112,33 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #ffb3c6;
-  clip-path: polygon(0 0, 50% 50%, 100% 0);
-  top: 0;
+  background: #ffd6e0;
+  clip-path: polygon(0 0, 50% 60%, 100% 0);
 }
 
-h1 {
-  font-family: 'Playfair Display', serif;
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
 
-/* Sections */
+/* 🎵 Button */
+#musicBtn {
+  margin-top: 20px;
+  padding: 12px 28px;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(135deg,#ff8fab,#ff5d8f);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(255,105,135,0.5);
+  transition: .3s;
+}
+
+#musicBtn:hover {
+  transform: translateY(-3px);
+}
+
+/* 📖 Sections */
 .section {
   min-height: 100vh;
   display: flex;
@@ -92,9 +146,9 @@ h1 {
   justify-content: center;
   align-items: center;
   opacity: 0;
-  transform: translateY(60px);
-  transition: all 1s ease;
-  padding: 20px;
+  transform: translateY(80px);
+  transition: all 1.2s cubic-bezier(.22,1,.36,1);
+  padding: 30px;
 }
 
 .section.show {
@@ -102,79 +156,75 @@ h1 {
   transform: translateY(0);
 }
 
+/* 🖼 Images */
 img {
   width: 90%;
-  max-width: 500px;
+  max-width: 520px;
   border-radius: 20px;
-  transition: transform 1.5s ease;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+  transition: transform 2s ease;
 }
 
-/* Cinematic */
-.special.show img {
-  transform: scale(1.15);
+.section.show img {
+  transform: scale(1.08);
 }
 
-.peak.show img {
-  animation: heartbeat 2s infinite;
-}
-
-@keyframes heartbeat {
-  0% { transform: scale(1.15); }
-  50% { transform: scale(1.25); }
-  100% { transform: scale(1.15); }
-}
-
+/* ❤️ Caption */
 .caption {
-  margin-top: 20px;
-  font-size: 18px;
+  margin-top: 25px;
+  font-size: 20px;
+  max-width: 600px;
   text-align: center;
-  max-width: 90%;
+  color: #333;
 }
 
-/* Music Button */
-#musicBtn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: none;
-  background: #ff8fab;
-  color: white;
-}
-
-/* Letter */
+/* 💌 Letter */
 #letter {
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px);
 }
 
 .letter-box {
-  background: rgba(255,255,255,0.7);
-  padding: 25px;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(25px);
+  padding: 40px;
   border-radius: 20px;
-  max-width: 90%;
-  line-height: 1.7;
+  max-width: 700px;
+  line-height: 1.9;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
 
-/* Final */
+/* typing cursor */
+#typedText::after {
+  content: "|";
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ❤️ Final */
 #final {
   font-family: 'Playfair Display', serif;
-  font-size: 24px;
+  font-size: 30px;
   text-align: center;
+  padding-bottom: 120px;
 }
+
 </style>
 </head>
 
 <body>
-  
-  <div id="lockscreen">
+
+<div id="lockscreen">
   <div class="lock-box">
     <h2>Enter Password 💌</h2>
-    <input type="password" id="passwordInput" placeholder="Enter password">
+    <input type="password" id="passwordInput">
     <button onclick="unlock()">Unlock</button>
-    <p id="error" style="color:red;"></p>
+    <p id="error"></p>
   </div>
 </div>
 
-<!-- 🎬 Intro -->
 <div id="landing">
   <h1>For Ishitha ❤️</h1>
   <div class="envelope" onclick="start()"></div>
@@ -182,22 +232,18 @@ img {
   <button id="musicBtn" onclick="playMusic()">Play Our Song 🎶</button>
 </div>
 
-<!-- 🎵 Music -->
 <iframe id="music" width="0" height="0"
 src="https://www.youtube.com/embed/rCoPr8UwRMc?enablejsapi=1"
 frameborder="0"></iframe>
 
-<!-- Story -->
 <div id="story"></div>
 
-<!-- 💌 Letter -->
 <div id="letter" class="section">
   <div class="letter-box">
     <p id="typedText"></p>
   </div>
 </div>
 
-<!-- ❤️ Final -->
 <div id="final" class="section">
   <p>
     Happy Birthday, Ishitha ❤️<br><br>
@@ -207,6 +253,7 @@ frameborder="0"></iframe>
 </div>
 
 <script>
+
 const captions = [
 "Where it all started… ❤️",
 "A beginning we didn’t understand yet",
@@ -228,15 +275,7 @@ const story = document.getElementById("story");
 
 for(let i=1;i<=14;i++){
   const div = document.createElement("div");
-
-  if([4,13].includes(i)){
-    div.className = "section special";
-  } else if([8,9].includes(i)){
-    div.className = "section peak";
-  } else {
-    div.className = "section";
-  }
-
+  div.className = "section";
   div.innerHTML = `
     <img src="img${i}.jpg">
     <div class="caption">${captions[i-1]}</div>
@@ -244,179 +283,62 @@ for(let i=1;i<=14;i++){
   story.appendChild(div);
 }
 
-/* Start */
 function start(){
-  document.getElementById("landing").style.display = "none";
+  const land = document.getElementById("landing");
+  land.style.opacity = "0";
+  setTimeout(()=> land.style.display="none",600);
 }
 
-/* Music */
 function playMusic(){
   document.getElementById("music").src += "&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
 }
 
-/* Scroll Reveal */
 function reveal(){
-  document.querySelectorAll(".section").forEach(sec => {
-    const top = sec.getBoundingClientRect().top;
-    if(top < window.innerHeight - 100){
+  document.querySelectorAll(".section").forEach(sec=>{
+    if(sec.getBoundingClientRect().top < window.innerHeight-100){
       sec.classList.add("show");
     }
   });
 }
 window.addEventListener("scroll", reveal);
 
-/* Typing */
 const message = `Happy 20th Birthday, my love ❤️
 
-Another year, another chapter…
-and somehow, every time I sit to write for you,
-it feels like words still fall short.
+You are my peace, my strength, my home.
 
-But today, I’ll try again—
-because you deserve to hear it, again and again.
+No matter where life takes us,
+I will always choose you.
 
-It still feels like yesterday—
-grade eight,
-that moment when you walked into the class…
-and unknowingly walked straight into my heart.
+Forever yours.`;
 
-That one "May I come in, ma’am?"
-still echoes somewhere inside me.
-
-I didn’t realize then
-that this simple moment
-would turn into a story so deep,
-so real,
-and so ours.
-
-From being those two innocent kids
-stealing glances…
-
-to becoming "us" after class nine…
-
-we’ve lived through everything—
-distance, silence, misunderstandings, pain…
-
-and yet,
-somehow,
-love always found its way back stronger.
-
-People say love fades with time,
-but what we have…
-
-it grew through every storm we faced.
-
-We were never perfect—
-but maybe that’s what made us real.
-
-When distance came,
-we learned how to feel without seeing.
-
-When silence came,
-our eyes spoke louder than words ever could.
-
-When things broke,
-we didn’t leave—
-we held on tighter.
-
-And that’s what makes us different.
-
-You’ve been so many things in my life—
-my girl, my peace, my strength.
-
-Sometimes you cared for me
-like no one else ever could…
-
-like I had a home in you.
-
-And somewhere along the way,
-that little girl from grade eight
-became my whole world.
-
-I know the journey hasn’t been easy for you.
-
-I’ve seen your pain,
-your struggles,
-the silent battles you’ve fought.
-
-And still,
-you stayed.
-Still, you loved.
-Still, you held my hand
-when it wasn’t easy.
-
-That strength of yours…
-I respect it more than I can ever express.
-
-This year,
-I don’t want you to carry any of the old pain with you.
-
-Let it go.
-Burn every memory that hurt you.
-
-You deserve a life
-that feels light, peaceful, and full of happiness.
-
-You deserve to smile without a reason,
-to live without fear,
-to love without holding back.
-
-I may not always be able to give you everything…
-
-but I promise you this—
-
-I’ll always give you
-my heart, my loyalty, and my presence.
-
-And I’ll keep proving, every day,
-that your trust in me was never wrong.
-
-"पानी में पत्थर मत फेंका करो, उसे भी कोई पीता है…  
-मरने की बात मत किया करो, तुम्हें देख कर भी कोई जीता है…"
-
-You are that reason someone lives.
-You are my reason.
-
-Happy Birthday, Ishitha.
-Happy 20th, my love ❤️
-
-Live it fully,
-smile endlessly,
-
-and never forget—
-you matter to me more than anything in this world.
-
-Forever yours,
-~ Your Loving Husband`;
 let i = 0;
 function typeLetter(){
   if(i < message.length){
     document.getElementById("typedText").innerHTML += message.charAt(i);
     i++;
-    setTimeout(typeLetter, 18);
+    setTimeout(typeLetter, 20);
   }
 }
 
-window.addEventListener("scroll", () => {
+window.addEventListener("scroll", ()=>{
   const letter = document.getElementById("letter");
-  if(letter.getBoundingClientRect().top < window.innerHeight - 100 && i===0){
+  if(letter.getBoundingClientRect().top < window.innerHeight-100 && i===0){
     typeLetter();
   }
 });
-  const correctPassword = "180110";
+
+const correctPassword = "180110";
 
 function unlock(){
   const input = document.getElementById("passwordInput").value;
-
   if(input === correctPassword){
     document.getElementById("lockscreen").style.display = "none";
   } else {
     document.getElementById("error").innerText = "Wrong password ❤️";
   }
 }
+
 </script>
 
 </body>
 </html>
-
-
