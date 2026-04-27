@@ -44,7 +44,7 @@
   border-radius: 20px;
 }
 
-/* BODY FIXED */
+/* BODY */
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
@@ -54,7 +54,6 @@ body {
   position: relative;
 }
 
-/* soft glow overlay */
 body::before {
   content: "";
   position: fixed;
@@ -64,19 +63,20 @@ body::before {
   z-index: 0;
 }
 
-/* FLOATING HEARTS */
+/* ❤️ HEARTS FIXED */
 .hearts {
   position: fixed;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-  z-index: 0;
+  z-index: 5;
 }
 
 .hearts span {
   position: absolute;
   bottom: -50px;
-  color: rgba(255, 105, 135, 0.4);
+  color: rgba(255, 80, 120, 0.8);
+  text-shadow: 0 0 10px rgba(255, 80, 120, 0.4);
   animation: floatUp 10s linear infinite;
 }
 
@@ -94,27 +94,21 @@ body::before {
   align-items: center;
   flex-direction: column;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .envelope {
   width: 200px;
   height: 130px;
   background: linear-gradient(135deg, #ff8fab, #ff6f91);
-  position: relative;
   cursor: pointer;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transition: transform 0.4s ease;
   animation: float 3s ease-in-out infinite;
 }
 
-.envelope:hover {
-  transform: scale(1.05);
-}
-
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
+  0%,100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
 }
 
@@ -127,27 +121,10 @@ body::before {
   align-items: center;
   opacity: 0;
   transform: translateY(60px) scale(0.98);
-  transition: 1s cubic-bezier(.2,.8,.2,1);
+  transition: 1s ease;
   padding: 30px;
   position: relative;
-  z-index: 1;
-}
-
-/* glowing pulse */
-.section::before {
-  content: "";
-  position: absolute;
-  width: 320px;
-  height: 320px;
-  background: radial-gradient(circle, rgba(255,255,255,0.5), transparent 70%);
-  filter: blur(50px);
-  opacity: 0.5;
-  animation: pulseGlow 6s ease-in-out infinite;
-}
-
-@keyframes pulseGlow {
-  0%, 100% { transform: scale(1); opacity: 0.4; }
-  50% { transform: scale(1.2); opacity: 0.7; }
+  z-index: 2;
 }
 
 .section.show {
@@ -155,29 +132,21 @@ body::before {
   transform: translateY(0) scale(1);
 }
 
-/* IMAGE CINEMATIC ZOOM */
+/* IMAGE */
 img {
   width: 90%;
   max-width: 520px;
   border-radius: 24px;
   box-shadow: 0 15px 40px rgba(0,0,0,0.25);
   transform: scale(1.05);
-  transition: transform 2s ease, box-shadow 0.6s ease;
-  filter: saturate(1.1) contrast(1.05);
-  position: relative;
-  z-index: 2;
+  transition: transform 2s ease;
 }
 
 .section.show img {
   transform: scale(1);
 }
 
-img:hover {
-  transform: scale(1.03);
-  box-shadow: 0 25px 60px rgba(0,0,0,0.35);
-}
-
-/* CAPTION DEPTH */
+/* CAPTION */
 .caption {
   margin-top: 18px;
   text-align: center;
@@ -186,19 +155,13 @@ img:hover {
   max-width: 80%;
   line-height: 1.4;
   font-weight: 500;
-  backdrop-filter: blur(2px);
-  background: rgba(255,255,255,0.2);
-  padding: 10px 15px;
-  border-radius: 12px;
-  position: relative;
-  z-index: 2;
 }
 
 /* LETTER */
 #letter {
   backdrop-filter: blur(10px);
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .letter-box {
@@ -214,8 +177,6 @@ img:hover {
   font-family: 'Playfair Display', serif;
   font-size: 24px;
   text-align: center;
-  position: relative;
-  z-index: 1;
 }
 
 </style>
@@ -269,23 +230,22 @@ frameborder="0"></iframe>
 
 <script>
 
-/* HEARTS */
+/* ❤️ HEARTS */
 function createHearts(){
   const hearts = document.querySelector(".hearts");
 
-  for(let i=0;i<25;i++){
-    const span = document.createElement("span");
-    span.innerHTML = "❤️";
-    span.style.left = Math.random()*100 + "vw";
-    span.style.animationDuration = (6 + Math.random()*6) + "s";
-    span.style.fontSize = (12 + Math.random()*20) + "px";
-    hearts.appendChild(span);
+  for(let i=0;i<35;i++){
+    const s = document.createElement("span");
+    s.innerHTML = "❤️";
+    s.style.left = Math.random()*100 + "vw";
+    s.style.animationDuration = (6 + Math.random()*6) + "s";
+    s.style.fontSize = (12 + Math.random()*20) + "px";
+    hearts.appendChild(s);
   }
 }
 createHearts();
 
-/* ORIGINAL LOGIC (UNCHANGED BELOW) */
-
+/* STORY DATA */
 const captions = [
 "Where it all started… ❤️",
 "A beginning we didn’t understand yet",
@@ -304,11 +264,9 @@ const captions = [
 ];
 
 const story = document.getElementById("story");
-
-let started = false;
 let index = 0;
+let started = false;
 let musicStarted = false;
-let autoMode = true;
 
 /* BUILD STORY */
 for(let i=1;i<=14;i++){
@@ -323,62 +281,174 @@ for(let i=1;i<=14;i++){
   story.appendChild(div);
 }
 
+/* AUTO FLOW (5 sec) */
+function startAutoFlow(){
+  const sections = document.querySelectorAll(".section");
+
+  function show(i){
+    if(i >= sections.length){
+      startLetter();
+      return;
+    }
+
+    sections[i].classList.add("show");
+
+    sections[i].scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+    if(i === 0 && !musicStarted){
+      document.getElementById("music").src += "&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
+      musicStarted = true;
+    }
+
+    setTimeout(() => show(i + 1), 5000);
+  }
+
+  show(0);
+}
+
+/* START */
 function start(){
   document.getElementById("landing").style.display = "none";
   started = true;
-  reveal();
+  startAutoFlow();
 }
-
-/* MUSIC */
-function playMusicOnce(){
-  if(!musicStarted){
-    document.getElementById("music").src += "&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
-    musicStarted = true;
-  }
-}
-
-/* REVEAL */
-function revealNext(){
-  const sections = document.querySelectorAll(".section");
-
-  if(index >= sections.length){
-    startLetter();
-    return;
-  }
-
-  sections[index].classList.add("show");
-
-  if(index === 0){
-    playMusicOnce();
-  }
-
-  index++;
-}
-
-document.addEventListener("click", () => {
-  if(started){
-    revealNext();
-  }
-});
 
 /* LETTER */
-const message = `...your full message unchanged...`;
+const message = `Happy 20th Birthday, my love ❤️
 
+Another year, another chapter…
+and somehow, every time I sit to write for you,
+it feels like words still fall short.
+
+But today, I’ll try again—
+because you deserve to hear it, again and again.
+
+It still feels like yesterday—
+grade eight,
+that moment when you walked into the class…
+and unknowingly walked straight into my heart.
+
+That one "May I come in, ma’am?"
+still echoes somewhere inside me.
+
+I didn’t realize then
+that this simple moment
+would turn into a story so deep,
+so real,
+and so ours.
+
+From being those two innocent kids
+stealing glances…
+
+to becoming "us" after class nine…
+
+we’ve lived through everything—
+distance, silence, misunderstandings, pain…
+
+and yet,
+somehow,
+love always found its way back stronger.
+
+People say love fades with time,
+but what we have…
+
+it grew through every storm we faced.
+
+We were never perfect—
+but maybe that’s what made us real.
+
+When distance came,
+we learned how to feel without seeing.
+
+When silence came,
+our eyes spoke louder than words ever could.
+
+When things broke,
+we didn’t leave—
+we held on tighter.
+
+And that’s what makes us different.
+
+You’ve been so many things in my life—
+my girl, my peace, my strength.
+
+Sometimes you cared for me
+like no one else ever could…
+
+like I had a home in you.
+
+And somewhere along the way,
+that little girl from grade eight
+became my whole world.
+
+I know the journey hasn’t been easy for you.
+
+I’ve seen your pain,
+your struggles,
+the silent battles you’ve fought.
+
+And still,
+you stayed.
+Still, you loved.
+Still, you held my hand
+when it wasn’t easy.
+
+That strength of yours…
+I respect it more than I can ever express.
+
+This year,
+I don’t want you to carry any of the old pain with you.
+
+Let it go.
+Burn every memory that hurt you.
+
+You deserve a life
+that feels light, peaceful, and full of happiness.
+
+You deserve to smile without a reason,
+to live without fear,
+to love without holding back.
+
+I may not always be able to give you everything…
+
+but I promise you this—
+
+I’ll always give you
+my heart, my loyalty, and my presence.
+
+And I’ll keep proving, every day,
+that your trust in me was never wrong.
+
+"पानी में पत्थर मत फेंका करो, उसे भी कोई पीता है…  
+मरने की बात मत किया करो, तुम्हें देख कर भी कोई जीता है…"
+
+You are that reason someone lives.
+You are my reason.
+
+Happy Birthday, Ishitha.
+Happy 20th, my love ❤️
+
+Live it fully,
+smile endlessly,
+
+and never forget—
+you matter to me more than anything in this world.`;
 let i = 0;
+
 function typeLetter(){
   if(i < message.length){
-    document.getElementById("typedText").innerHTML += message.charAt(i);
-    i++;
+    document.getElementById("typedText").innerHTML += message.charAt(i++);
     setTimeout(typeLetter, 18);
   }
 }
 
-window.addEventListener("scroll", () => {
-  const letter = document.getElementById("letter");
-  if(letter.getBoundingClientRect().top < window.innerHeight - 100 && i===0){
-    typeLetter();
-  }
-});
+function startLetter(){
+  document.getElementById("letter").classList.add("show");
+  typeLetter();
+}
 
 /* PASSWORD */
 function unlock(){
