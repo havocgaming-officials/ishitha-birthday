@@ -28,22 +28,6 @@
   text-align: center;
 }
 
-.lock-box input {
-  padding: 10px;
-  margin-top: 10px;
-  width: 80%;
-  border-radius: 10px;
-}
-
-.lock-box button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  border: none;
-  background: #ff8fab;
-  color: white;
-  border-radius: 20px;
-}
-
 /* BODY */
 body {
   margin: 0;
@@ -51,32 +35,21 @@ body {
   background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
   overflow-x: hidden;
   scroll-behavior: smooth;
-  position: relative;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at top, rgba(255,255,255,0.35), transparent 60%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ❤️ HEARTS FIXED */
+/* ❤️ HEARTS (FIXED: BACKGROUND ONLY) */
 .hearts {
   position: fixed;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-  z-index: 5;
+  z-index: 0;
 }
 
 .hearts span {
   position: absolute;
   bottom: -50px;
-  color: rgba(255, 80, 120, 0.8);
-  text-shadow: 0 0 10px rgba(255, 80, 120, 0.4);
+  color: rgba(255, 80, 120, 0.7);
   animation: floatUp 10s linear infinite;
 }
 
@@ -101,15 +74,9 @@ body::before {
   width: 200px;
   height: 130px;
   background: linear-gradient(135deg, #ff8fab, #ff6f91);
-  cursor: pointer;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  cursor: pointer;
 }
 
 /* SECTIONS */
@@ -120,16 +87,16 @@ body::before {
   justify-content: center;
   align-items: center;
   opacity: 0;
-  transform: translateY(60px) scale(0.98);
+  transform: translateY(60px);
   transition: 1s ease;
   padding: 30px;
   position: relative;
-  z-index: 2;
+  z-index: 2; /* ABOVE HEARTS */
 }
 
 .section.show {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
 }
 
 /* IMAGE */
@@ -152,20 +119,16 @@ img {
   text-align: center;
   font-size: 18px;
   color: rgba(0,0,0,0.7);
-  max-width: 80%;
-  line-height: 1.4;
-  font-weight: 500;
 }
 
 /* LETTER */
 #letter {
-  backdrop-filter: blur(10px);
   position: relative;
   z-index: 2;
 }
 
 .letter-box {
-  background: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.85);
   padding: 25px;
   border-radius: 20px;
   max-width: 90%;
@@ -193,7 +156,6 @@ img {
     <h2>Enter Password 💌</h2>
     <input type="password" id="passwordInput">
     <button onclick="unlock()">Unlock</button>
-    <p id="error" style="color:red;"></p>
   </div>
 </div>
 
@@ -201,7 +163,6 @@ img {
 <div id="landing">
   <h1>For Ishitha ❤️</h1>
   <div class="envelope" onclick="start()"></div>
-  <p>Tap to open</p>
 </div>
 
 <!-- MUSIC -->
@@ -234,18 +195,18 @@ frameborder="0"></iframe>
 function createHearts(){
   const hearts = document.querySelector(".hearts");
 
-  for(let i=0;i<35;i++){
+  for(let i=0;i<30;i++){
     const s = document.createElement("span");
     s.innerHTML = "❤️";
     s.style.left = Math.random()*100 + "vw";
     s.style.animationDuration = (6 + Math.random()*6) + "s";
-    s.style.fontSize = (12 + Math.random()*20) + "px";
+    s.style.fontSize = (10 + Math.random()*20) + "px";
     hearts.appendChild(s);
   }
 }
 createHearts();
 
-/* STORY DATA */
+/* DATA */
 const captions = [
 "Where it all started… ❤️",
 "A beginning we didn’t understand yet",
@@ -264,9 +225,6 @@ const captions = [
 ];
 
 const story = document.getElementById("story");
-let index = 0;
-let started = false;
-let musicStarted = false;
 
 /* BUILD STORY */
 for(let i=1;i<=14;i++){
@@ -281,12 +239,24 @@ for(let i=1;i<=14;i++){
   story.appendChild(div);
 }
 
-/* AUTO FLOW (5 sec) */
-function startAutoFlow(){
+let musicStarted = false;
+
+/* FLOW CONTROL */
+function start(){
+  document.getElementById("landing").style.display = "none";
+  startFlow();
+}
+
+/* MAIN SEQUENCE */
+function startFlow(){
   const sections = document.querySelectorAll(".section");
 
-  function show(i){
-    if(i >= sections.length){
+  let i = 0;
+
+  function next(){
+
+    // STOP AFTER IMAGES (last 2 sections are letter + final)
+    if(i >= sections.length - 2){
       startLetter();
       return;
     }
@@ -303,17 +273,12 @@ function startAutoFlow(){
       musicStarted = true;
     }
 
-    setTimeout(() => show(i + 1), 5000);
+    i++;
+
+    setTimeout(next, 5000);
   }
 
-  show(0);
-}
-
-/* START */
-function start(){
-  document.getElementById("landing").style.display = "none";
-  started = true;
-  startAutoFlow();
+  next();
 }
 
 /* LETTER */
@@ -436,12 +401,20 @@ smile endlessly,
 
 and never forget—
 you matter to me more than anything in this world.`;
+
 let i = 0;
 
 function typeLetter(){
   if(i < message.length){
     document.getElementById("typedText").innerHTML += message.charAt(i++);
     setTimeout(typeLetter, 18);
+  } else {
+    setTimeout(() => {
+      document.getElementById("final").classList.add("show");
+      document.getElementById("final").scrollIntoView({
+        behavior: "smooth"
+      });
+    }, 800);
   }
 }
 
@@ -454,8 +427,6 @@ function startLetter(){
 function unlock(){
   if(document.getElementById("passwordInput").value === "180110"){
     document.getElementById("lockscreen").style.display = "none";
-  } else {
-    document.getElementById("error").innerText = "Wrong password ❤️";
   }
 }
 
