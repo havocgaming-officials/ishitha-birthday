@@ -46,6 +46,14 @@
 
 /* BODY */
 body {
+  body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(255,255,255,0.3), transparent 60%);
+  pointer-events: none;
+}
+  scroll-behavior: smooth;
   margin: 0;
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
@@ -64,20 +72,22 @@ body {
 .envelope {
   width: 200px;
   height: 130px;
-  background: #ff8fab;
+  background: linear-gradient(135deg, #ff8fab, #ff6f91);
   position: relative;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  transition: transform 0.4s ease;
+  animation: float 3s ease-in-out infinite;
 }
 
-.envelope::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #ffb3c6;
-  clip-path: polygon(0 0, 50% 50%, 100% 0);
-  top: 0;
+.envelope:hover {
+  transform: scale(1.05);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 /* SECTIONS */
@@ -88,26 +98,64 @@ body {
   justify-content: center;
   align-items: center;
   opacity: 0;
-  transform: translateY(60px);
-  transition: 1s ease;
-  padding: 20px;
+  transform: translateY(60px) scale(0.98);
+  transition: 1s cubic-bezier(.2,.8,.2,1);
+  padding: 30px;
+  position: relative;
+}
+
+/* soft glowing background effect */
+.section::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 70%);
+  filter: blur(40px);
+  z-index: 0;
+  opacity: 0.6;
 }
 
 .section.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
-
+  
 img {
   width: 90%;
-  max-width: 500px;
-  border-radius: 20px;
+  max-width: 520px;
+  border-radius: 24px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  transform: scale(0.98);
+  transition: transform 0.6s ease, box-shadow 0.6s ease, filter 0.6s ease;
+  filter: saturate(1.1) contrast(1.05);
+}
+
+/* when section becomes visible */
+.section.show img {
+  transform: scale(1);
+}
+
+/* hover effect (desktop only) */
+img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.35);
 }
 
 .caption {
-  margin-top: 20px;
+  margin-top: 18px;
   text-align: center;
   font-size: 18px;
+  color: rgba(0,0,0,0.7);
+  max-width: 80%;
+  line-height: 1.4;
+  font-weight: 500;
+  animation: fadeInText 1.2s ease;
+}
+
+@keyframes fadeInText {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* LETTER */
