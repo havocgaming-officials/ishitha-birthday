@@ -156,10 +156,10 @@ frameborder="0"></iframe>
 <div id="story"></div>
 
 <!-- LETTER -->
-<div id="letter" class="section">
-  <div class="letter-box">
-    <p id="typedText">
-Happy 20th Birthday, my love ❤️
+function startLetter(){
+  document.getElementById("letter").classList.add("show");
+
+  let message = `Happy 20th Birthday, my love ❤️
 Another year, another chapter… and somehow, every time I sit to write for you, it feels like words still fall short. But today, I’ll try again—because you deserve to hear it, again and again.
 It still feels like yesterday—grade eight, that moment when you walked into the class… and unknowingly walked straight into my heart. That one “May I come in, ma’am?” still echoes somewhere inside me. I didn’t realize then that this simple moment would turn into a story so deep, so real, and so ours.
 From being those two innocent kids stealing glances, to becoming “us” after class nine… we’ve lived through everything—distance, silence, misunderstandings, pain, and yet, somehow, love always found its way back stronger. People say love fades with time, but what we have… it grew through every storm we faced.
@@ -171,10 +171,23 @@ I may not always be able to give you everything, not gifts, not grand things… 
 “पानी में पत्थर मत फेंका करो, उसे भी कोई पीता है… मरने की बात मत किया करो, तुम्हें देख कर भी कोई जीता है…”
 You are that reason someone lives. You are my reason.
 Happy Birthday, Ishitha. Happy 20th, my love ❤️ Live it fully, smile endlessly, and never forget—you matter, to me more than anything in this world.
-Forever yours, ~ Your Loving Husband
-    </p>
-  </div>
-</div>
+Forever yours, ~ Your Loving Husband`;
+
+  let i = 0;
+  document.getElementById("typedText").innerHTML = "";
+
+  function type(){
+    if(i < message.length){
+      document.getElementById("typedText").innerHTML += message.charAt(i);
+      i++;
+      setTimeout(type, 18);
+    } else {
+      document.getElementById("final").classList.add("show");
+    }
+  }
+
+  type();
+}
 
 <!-- FINAL -->
 <div id="final" class="section">
