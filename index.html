@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -9,6 +9,7 @@
 
 <style>
 
+/* LOCKSCREEN */
 #lockscreen {
   position: fixed;
   width: 100%;
@@ -27,6 +28,23 @@
   text-align: center;
 }
 
+.lock-box input {
+  padding: 10px;
+  margin-top: 10px;
+  width: 80%;
+  border-radius: 10px;
+}
+
+.lock-box button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  background: #ff8fab;
+  color: white;
+  border-radius: 20px;
+}
+
+/* BODY */
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
@@ -34,6 +52,7 @@ body {
   overflow-x: hidden;
 }
 
+/* ENVELOPE */
 #landing {
   height: 100vh;
   display: flex;
@@ -61,6 +80,7 @@ body {
   top: 0;
 }
 
+/* SECTIONS */
 .section {
   min-height: 100vh;
   display: flex;
@@ -69,7 +89,7 @@ body {
   align-items: center;
   opacity: 0;
   transform: translateY(60px);
-  transition: all 1s ease;
+  transition: 1s ease;
   padding: 20px;
 }
 
@@ -78,29 +98,27 @@ body {
   transform: translateY(0);
 }
 
-/* IMAGE FIX */
-.img-wrap {
+/* IMAGE */
+img {
   width: 90%;
   max-width: 500px;
   border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.25);
 }
 
-.img-wrap img {
-  width: 100%;
-  display: block;
-}
-
-/* caption */
+/* CAPTION */
 .caption {
   margin-top: 20px;
   text-align: center;
+  font-size: 18px;
 }
 
 /* LETTER */
+#letter {
+  backdrop-filter: blur(10px);
+}
+
 .letter-box {
-  background: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.7);
   padding: 25px;
   border-radius: 20px;
   max-width: 90%;
@@ -112,34 +130,59 @@ body {
 
 <body>
 
+<!-- LOCK -->
 <div id="lockscreen">
   <div class="lock-box">
     <h2>Enter Password 💌</h2>
     <input type="password" id="passwordInput">
     <button onclick="unlock()">Unlock</button>
+    <p id="error" style="color:red;"></p>
   </div>
 </div>
 
+<!-- ENVELOPE -->
 <div id="landing">
   <h1>For Ishitha ❤️</h1>
   <div class="envelope" onclick="start()"></div>
   <p>Tap to open</p>
 </div>
 
+<!-- MUSIC -->
 <iframe id="music" width="0" height="0"
-src="https://www.youtube.com/embed/rCoPr8UwRMc?enablejsapi=1"></iframe>
+src="https://www.youtube.com/embed/rCoPr8UwRMc?enablejsapi=1"
+frameborder="0"></iframe>
 
+<!-- STORY -->
 <div id="story"></div>
 
 <!-- LETTER -->
 <div id="letter" class="section">
   <div class="letter-box">
-    <p id="typedText"></p>
+    <p id="typedText">
+Happy 20th Birthday, my love ❤️
+Another year, another chapter… and somehow, every time I sit to write for you, it feels like words still fall short. But today, I’ll try again—because you deserve to hear it, again and again.
+It still feels like yesterday—grade eight, that moment when you walked into the class… and unknowingly walked straight into my heart. That one “May I come in, ma’am?” still echoes somewhere inside me. I didn’t realize then that this simple moment would turn into a story so deep, so real, and so ours.
+From being those two innocent kids stealing glances, to becoming “us” after class nine… we’ve lived through everything—distance, silence, misunderstandings, pain, and yet, somehow, love always found its way back stronger. People say love fades with time, but what we have… it grew through every storm we faced.
+We were never perfect—but maybe that’s what made us real. When distance came, we learned how to feel without seeing. When silence came, our eyes spoke louder than words ever could. When things broke, we didn’t leave—we held on tighter. And that’s what makes us different.
+You’ve been so many things in my life—my girl, my peace, my strength. Sometimes you cared for me like no one else ever could, like I had a home in you. And somewhere along the way, that little girl from grade eight became my whole world.
+I know the journey hasn’t been easy for you. I’ve seen your pain, your struggles, the silent battles you’ve fought. And still, you stayed. Still, you loved. Still, you held my hand when it wasn’t easy. That strength of yours… I respect it more than I can ever express.
+This year, I don’t want you to carry any of the old pain with you. Let it go. Burn every memory that hurt you. You deserve a life that feels light, peaceful, and full of happiness. You deserve to smile without a reason, to live without fear, to love without holding back.
+I may not always be able to give you everything, not gifts, not grand things… but I promise you this—I’ll always give you my heart, my loyalty, and my presence. And I’ll keep proving, every day, that your trust in me was never wrong.
+“पानी में पत्थर मत फेंका करो, उसे भी कोई पीता है… मरने की बात मत किया करो, तुम्हें देख कर भी कोई जीता है…”
+You are that reason someone lives. You are my reason.
+Happy Birthday, Ishitha. Happy 20th, my love ❤️ Live it fully, smile endlessly, and never forget—you matter, to me more than anything in this world.
+Forever yours, ~ Your Loving Husband
+    </p>
   </div>
 </div>
 
+<!-- FINAL -->
 <div id="final" class="section">
-  <p>Happy Birthday ❤️</p>
+  <p>
+    Happy Birthday, Ishitha ❤️<br><br>
+    Forever yours,<br>
+    ~ Your Loving Husband
+  </p>
 </div>
 
 <script>
@@ -163,34 +206,33 @@ const captions = [
 
 const story = document.getElementById("story");
 
+let started = false;
+let index = 0;
+let musicStarted = false;
+
+/* CREATE SECTIONS (HIDDEN INITIALLY) */
 for(let i=1;i<=14;i++){
   const div = document.createElement("div");
   div.className = "section";
 
   div.innerHTML = `
-    <div class="img-wrap">
-      <img src="img${i}.jpg">
-    </div>
+    <img src="img${i}.jpg">
     <div class="caption">${captions[i-1]}</div>
   `;
 
   story.appendChild(div);
 }
 
-/* STATE */
-let started = false;
-let index = 0;
-let musicStarted = false;
-
 /* START */
 function start(){
   document.getElementById("landing").style.display = "none";
   started = true;
+
   reveal();
-  autoPlay();
+  autoReveal();
 }
 
-/* SCROLL */
+/* SCROLL ALLOWED */
 function reveal(){
   if(!started) return;
 
@@ -203,155 +245,39 @@ function reveal(){
 
 window.addEventListener("scroll", reveal);
 
-/* AUTO IMAGES */
-function autoPlay(){
-
+/* AUTO IMAGE REVEAL */
+function autoReveal(){
   const sections = document.querySelectorAll(".section");
 
-  if(index >= sections.length - 2) { // stop before letter/final
-    startLetter();
+  if(index >= sections.length){
+    triggerLetter();
     return;
   }
 
   sections[index].classList.add("show");
 
+  /* MUSIC ON FIRST IMAGE */
   if(index === 0 && !musicStarted){
     document.getElementById("music").src += "&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
     musicStarted = true;
   }
 
   index++;
-  setTimeout(autoPlay, 5000);
+
+  setTimeout(autoReveal, 5000);
 }
 
-/* LETTER (FIXED ORIGINAL LOGIC RESTORED) */
-const message = `Happy 20th Birthday, my love ❤️
-
-Another year, another chapter…
-and somehow, every time I sit to write for you,
-it feels like words still fall short.
-
-But today, I’ll try again—
-because you deserve to hear it, again and again.
-
-It still feels like yesterday—
-grade eight,
-that moment when you walked into the class…
-and unknowingly walked straight into my heart.
-
-That one "May I come in, ma’am?"
-still echoes somewhere inside me.
-
-I didn’t realize then
-that this simple moment
-would turn into a story so deep,
-so real,
-and so ours.
-
-From being those two innocent kids
-stealing glances…
-
-to becoming "us" after class nine…
-
-we’ve lived through everything—
-distance, silence, misunderstandings, pain…
-
-and yet,
-somehow,
-love always found its way back stronger.
-
-People say love fades with time,
-but what we have…
-
-it grew through every storm we faced.
-
-We were never perfect—
-but maybe that’s what made us real.
-
-When distance came,
-we learned how to feel without seeing.
-
-When silence came,
-our eyes spoke louder than words ever could.
-
-When things broke,
-we didn’t leave—
-we held on tighter.
-
-And that’s what makes us different.
-
-You’ve been so many things in my life—
-my girl, my peace, my strength.
-
-Sometimes you cared for me
-like no one else ever could…
-
-like I had a home in you.
-
-And somewhere along the way,
-that little girl from grade eight
-became my whole world.
-
-I know the journey hasn’t been easy for you.
-
-I’ve seen your pain,
-your struggles,
-the silent battles you’ve fought.
-
-And still,
-you stayed.
-Still, you loved.
-Still, you held my hand
-when it wasn’t easy.
-
-That strength of yours…
-I respect it more than I can ever express.
-
-This year,
-I don’t want you to carry any of the old pain with you.
-
-Let it go.
-Burn every memory that hurt you.
-
-You deserve a life
-that feels light, peaceful, and full of happiness.
-
-You deserve to smile without a reason,
-to live without fear,
-to love without holding back.
-
-I may not always be able to give you everything…
-
-but I promise you this—
-
-I’ll always give you
-my heart, my loyalty, and my presence.
-
-And I’ll keep proving, every day,
-that your trust in me was never wrong.
-
-You are my reason.
-
-Happy Birthday ❤️
-`;
-
-let t = 0;
-function startLetter(){
+/* LETTER */
+function triggerLetter(){
   document.getElementById("letter").classList.add("show");
-
-  function type(){
-    if(t < message.length){
-      document.getElementById("typedText").innerHTML += message[t++];
-      setTimeout(type, 18);
-    }
-  }
-  type();
 }
 
 /* PASSWORD */
 function unlock(){
   if(document.getElementById("passwordInput").value === "180110"){
     document.getElementById("lockscreen").style.display = "none";
+  } else {
+    document.getElementById("error").innerText = "Wrong password ❤️";
   }
 }
 
