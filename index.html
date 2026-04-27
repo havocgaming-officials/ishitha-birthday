@@ -9,7 +9,7 @@
 
 <style>
 
-/* LOCKSCREEN */
+/* LOCKSCREEN (ONLY SCREEN ON START) */
 #lockscreen {
   position: fixed;
   inset: 0;
@@ -17,26 +17,23 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 99999;
 }
 
-.lock-box {
-  background: white;
-  padding: 30px;
-  border-radius: 20px;
-  text-align: center;
+/* REMOVE PAGE SCROLL UNTIL UNLOCKED */
+body.locked {
+  overflow: hidden;
+  height: 100vh;
 }
 
-/* BODY FIXED */
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
   overflow-x: hidden;
-  scroll-behavior: smooth;
 }
 
-/* HEARTS BACKGROUND ONLY */
+/* HEARTS */
 .hearts {
   position: fixed;
   inset: 0;
@@ -47,138 +44,126 @@ body {
 .hearts span {
   position: absolute;
   bottom: -50px;
-  color: rgba(255, 80, 120, 0.7);
+  color: rgba(255,80,120,0.7);
   animation: floatUp 10s linear infinite;
 }
 
 @keyframes floatUp {
-  0% { transform: translateY(0); opacity: 0; }
-  10% { opacity: 1; }
-  100% { transform: translateY(-110vh); opacity: 0; }
+  0% {transform:translateY(0);opacity:0;}
+  10% {opacity:1;}
+  100% {transform:translateY(-110vh);opacity:0;}
 }
 
-/* ENVELOPE CENTERED & REALISTIC */
+/* LANDING */
 #landing {
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
 }
 
+/* REAL ENVELOPE */
 .envelope {
-  width: 220px;
-  height: 140px;
-  background: linear-gradient(145deg, #ff6f91, #ff8fab);
+  width: 230px;
+  height: 150px;
+  background: #ff6f91;
   position: relative;
   border-radius: 10px;
   box-shadow: 0 15px 40px rgba(0,0,0,0.3);
   cursor: pointer;
-  transform: perspective(600px) rotateX(10deg);
 }
 
 /* flap */
 .envelope::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-left: 110px solid transparent;
-  border-right: 110px solid transparent;
-  border-top: 70px solid #ffb3c6;
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:0;
+  height:0;
+  border-left:115px solid transparent;
+  border-right:115px solid transparent;
+  border-top:75px solid #ffb3c6;
 }
 
 /* SECTIONS */
 .section {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transform: translateY(60px);
-  transition: 1s ease;
-  padding: 30px;
-  position: relative;
-  z-index: 2;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  transform:translateY(60px);
+  transition:1s ease;
+  padding:30px;
+  z-index:2;
 }
 
 .section.show {
-  opacity: 1;
-  transform: translateY(0);
+  opacity:1;
+  transform:translateY(0);
 }
 
 /* IMAGE */
 img {
-  width: 90%;
-  max-width: 520px;
-  border-radius: 24px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-  transform: scale(1.05);
-  transition: 2s ease;
+  width:90%;
+  max-width:520px;
+  border-radius:24px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.25);
+  transition:2s ease;
 }
 
-.section.show img {
-  transform: scale(1);
-}
-
-/* CAPTION */
 .caption {
-  margin-top: 15px;
-  text-align: center;
-  font-size: 18px;
-  color: rgba(0,0,0,0.7);
+  margin-top:15px;
+  text-align:center;
+  font-size:18px;
 }
 
 /* LETTER */
-#letter {
-  position: relative;
-  z-index: 2;
-}
-
 .letter-box {
-  background: rgba(255,255,255,0.9);
-  padding: 25px;
-  border-radius: 20px;
-  max-width: 90%;
-  line-height: 1.7;
+  background:rgba(255,255,255,0.9);
+  padding:25px;
+  border-radius:20px;
+  max-width:90%;
+  line-height:1.7;
 }
 
 /* FINAL */
 #final {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px;
-  text-align: center;
+  font-family:'Playfair Display', serif;
+  font-size:24px;
+  text-align:center;
 }
 
 </style>
 </head>
 
-<body>
+<body class="locked">
 
 <div class="hearts"></div>
 
 <!-- LOCK -->
 <div id="lockscreen">
-  <div class="lock-box">
+  <div style="text-align:center;background:white;padding:30px;border-radius:20px;">
     <h2>Enter Password 💌</h2>
     <input type="password" id="passwordInput">
     <button onclick="unlock()">Unlock</button>
+    <p id="error"></p>
   </div>
 </div>
 
 <!-- ENVELOPE -->
 <div id="landing">
   <div class="envelope" onclick="start()"></div>
-  <p>Tap the envelope 💌</p>
+  <p>Tap envelope 💌</p>
 </div>
 
-<!-- MUSIC (Waalian) -->
-<iframe id="music" width="0" height="0"
-src="https://www.youtube.com/embed/rCoPr8UwRMc?enablejsapi=1"
-frameborder="0"></iframe>
+<!-- REAL AUDIO (FIX FOR MUSIC) -->
+<audio id="music" loop>
+  <source src="waalian.mp3" type="audio/mpeg">
+</audio>
 
 <!-- STORY -->
 <div id="story"></div>
@@ -192,18 +177,14 @@ frameborder="0"></iframe>
 
 <!-- FINAL -->
 <div id="final" class="section">
-  <p>
-    Happy Birthday Ishitha ❤️<br><br>
-    Forever yours<br>
-    ~ Your person
-  </p>
+  <p>Happy Birthday Ishitha ❤️</p>
 </div>
 
 <script>
 
 /* HEARTS */
 function createHearts(){
-  const h = document.querySelector(".hearts");
+  const h=document.querySelector(".hearts");
   for(let i=0;i<25;i++){
     const s=document.createElement("span");
     s.innerHTML="❤️";
@@ -221,46 +202,54 @@ const captions=[
 "Slowly… you became important",
 "Somewhere here… it became real ❤️",
 "You became my comfort",
-"Moments I never want to lose",
 "You became my peace",
 "This is where I knew ❤️",
 "You’re my forever",
-"Every moment with you matters",
-"You and me against everything",
+"Every moment matters",
 "Still choosing you",
-"Even unreal moments feel real ❤️",
 "Our forever starts here"
 ];
 
 const story=document.getElementById("story");
 
-for(let i=1;i<=14;i++){
+for(let i=1;i<=10;i++){
   const d=document.createElement("div");
   d.className="section";
   d.innerHTML=`<img src="img${i}.jpg"><div class="caption">${captions[i-1]}</div>`;
   story.appendChild(d);
 }
 
-let musicStarted=false;
+/* PASSWORD */
+function unlock(){
+  const val=document.getElementById("passwordInput").value;
 
-/* START */
-function start(){
-  document.getElementById("lockscreen").style.display="none";
+  if(val==="180110"){
+    document.body.classList.remove("locked");
+    document.getElementById("lockscreen").style.display="none";
 
-  // start music immediately after password
-  const music=document.getElementById("music");
-  music.src+="&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
+    // 🔥 MUSIC START (FIXED)
+    const music=document.getElementById("music");
+    music.play().catch(()=>{});
 
-  startFlow();
+  } else {
+    document.getElementById("error").innerText="Wrong password ❤️";
+  }
 }
 
-/* FLOW */
-function startFlow(){
+/* START FLOW */
+function start(){
+  document.getElementById("landing").style.display="none";
+  flow();
+}
+
+/* 7 SECOND SMOOTH FLOW */
+function flow(){
   const sec=document.querySelectorAll(".section");
   let i=0;
 
   function next(){
-    if(i>=sec.length-2){
+
+    if(i>=sec.length-1){
       startLetter();
       return;
     }
@@ -269,7 +258,7 @@ function startFlow(){
     sec[i].scrollIntoView({behavior:"smooth",block:"center"});
 
     i++;
-    setTimeout(next,5000);
+    setTimeout(next,7000); // 🔥 7 seconds now
   }
 
   next();
@@ -395,7 +384,6 @@ smile endlessly,
 
 and never forget—
 you matter to me more than anything in this world.`;
-
 let i=0;
 
 function typeLetter(){
@@ -413,13 +401,6 @@ function typeLetter(){
 function startLetter(){
   document.getElementById("letter").classList.add("show");
   typeLetter();
-}
-
-/* PASSWORD */
-function unlock(){
-  if(document.getElementById("passwordInput").value==="180110"){
-    document.getElementById("lockscreen").style.display="none";
-  }
 }
 
 </script>
