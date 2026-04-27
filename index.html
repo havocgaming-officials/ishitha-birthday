@@ -9,7 +9,7 @@
 
 <style>
 
-/* LOCK + GLOBAL SCROLL FIX */
+/* GLOBAL SCROLL LOCK */
 html, body {
   height: 100%;
   margin: 0;
@@ -22,13 +22,12 @@ body.unlocked {
   overflow-y: auto;
 }
 
-/* ❤️ HEARTS (FIXED + BACKGROUND ONLY) */
+/* HEARTS */
 .hearts {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  overflow: hidden;
 }
 
 .hearts span {
@@ -36,13 +35,12 @@ body.unlocked {
   bottom: -50px;
   color: rgba(255, 90, 130, 0.45);
   animation: floatUp 12s linear infinite;
-  text-shadow: 0 0 8px rgba(255, 100, 140, 0.3);
 }
 
 @keyframes floatUp {
-  0% { transform: translateY(0) scale(1); opacity: 0; }
+  0% { transform: translateY(0); opacity: 0; }
   10% { opacity: 1; }
-  100% { transform: translateY(-110vh) scale(1.4); opacity: 0; }
+  100% { transform: translateY(-110vh); opacity: 0; }
 }
 
 /* LOCKSCREEN */
@@ -63,7 +61,7 @@ body.unlocked {
   text-align: center;
 }
 
-/* LANDING */
+/* ENVELOPE */
 #landing {
   height: 100vh;
   display:flex;
@@ -72,7 +70,6 @@ body.unlocked {
   flex-direction:column;
 }
 
-/* ENVELOPE */
 .envelope {
   width: 230px;
   height: 150px;
@@ -148,7 +145,7 @@ img {
 
 <body class="locked">
 
-<!-- ❤️ HEARTS -->
+<!-- HEARTS -->
 <div class="hearts"></div>
 
 <!-- LOCK -->
@@ -185,14 +182,14 @@ img {
 
 <!-- FINAL -->
 <div id="final" class="section">
-  <p>Happy Birthday Ishitha ❤️ <br><br>
+  <p>Happy Birthday Ishitha ❤️<br><br>
     Forever yours,<br>
     ~ Your Loving Husband</p>
 </div>
 
 <script>
 
-/* ❤️ HEARTS */
+/* HEARTS */
 function createHearts(){
   const hearts = document.querySelector(".hearts");
 
@@ -201,7 +198,6 @@ function createHearts(){
     s.innerHTML = "❤️";
     s.style.left = Math.random()*100 + "vw";
     s.style.animationDuration = (8 + Math.random()*6) + "s";
-    s.style.fontSize = (14 + Math.random()*20) + "px";
     hearts.appendChild(s);
   }
 }
@@ -212,14 +208,11 @@ function unlock(){
   const val = document.getElementById("passwordInput").value;
 
   if(val === "180110"){
-
     document.getElementById("lockscreen").style.display = "none";
-    document.body.classList.remove("locked");
     document.body.classList.add("unlocked");
 
     const music = document.getElementById("music");
     music.currentTime = 0;
-
     music.play().catch(()=>{});
 
   } else {
@@ -256,30 +249,42 @@ for(let i=1;i<=11;i++){
   story.appendChild(div);
 }
 
-/* FLOW (10 sec now) */
+/* MAIN FLOW + SYNC FIX */
 function start(){
   document.getElementById("landing").style.display = "none";
 
   const sections = document.querySelectorAll(".section");
   let i = 0;
+  let letterStarted = false;
 
   function next(){
-    if(i >= sections.length - 1){
-      startLetter();
+
+    if(i >= sections.length){
       return;
     }
 
     sections[i].classList.add("show");
-    sections[i].scrollIntoView({behavior:"smooth", block:"center"});
+
+    sections[i].scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+    // ✅ LETTER STARTS IMMEDIATELY ON FIRST IMAGE APPEARANCE
+    if(!letterStarted){
+      startLetter();
+      letterStarted = true;
+    }
 
     i++;
-    setTimeout(next, 10000); // ⏱ 10 seconds
+
+    setTimeout(next, 10000); // 10 sec per image
   }
 
   next();
 }
 
-/* LETTER (SLOWER + READABLE) */
+/* LETTER */
 const message = `Happy 20th Birthday, my love ❤️
 
 Another year, another chapter…
@@ -405,12 +410,12 @@ let i = 0;
 function typeLetter(){
   if(i < message.length){
     document.getElementById("typedText").innerHTML += message.charAt(i++);
-    setTimeout(typeLetter, 35); // ✍️ slower typing
+    setTimeout(typeLetter, 35);
   } else {
     setTimeout(()=>{
       document.getElementById("final").classList.add("show");
       document.getElementById("final").scrollIntoView({behavior:"smooth"});
-    }, 1200);
+    }, 1000);
   }
 }
 
