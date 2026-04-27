@@ -3,154 +3,210 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>For Ishitha ❤️</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Playfair+Display&display=swap" rel="stylesheet">
 
 <style>
 
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #ffd6e0, #e6d6ff);
-  overflow: hidden;
-}
-
-/* 🔒 LOCK */
-#lockscreen, #tapScreen {
+  /* 🔒 Lock Screen */
+#lockscreen {
   position: fixed;
-  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  background: radial-gradient(circle, #ffd6e0, #e6d6ff);
   z-index: 9999;
+}
+
+.lock-box {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
   text-align: center;
 }
 
-.box {
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(15px);
-  padding: 30px;
+.lock-box input {
+  padding: 10px;
+  margin-top: 10px;
+  width: 80%;
+  border-radius: 10px;
+}
+
+.lock-box button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  background: #ff8fab;
+  color: white;
   border-radius: 20px;
 }
-
-/* 🎬 TAP SCREEN */
-#tapScreen {
-  display: none;
+  
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
+  overflow-x: hidden;
 }
 
-/* 🖼 STORY */
-#storyContainer {
+/* 🎬 Envelope Intro */
+#landing {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   text-align: center;
+}
+
+.envelope {
+  width: 200px;
+  height: 130px;
+  background: #ff8fab;
+  position: relative;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.envelope::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #ffb3c6;
+  clip-path: polygon(0 0, 50% 50%, 100% 0);
+  top: 0;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Sections */
+.section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 1s ease;
   padding: 20px;
 }
 
-.imageBox {
-  width: 90%;
-  max-width: 520px;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-  opacity: 0;
-  transform: scale(0.95);
-  transition: all 1s ease;
-}
-
-.imageBox.show {
+.section.show {
   opacity: 1;
-  transform: scale(1);
+  transform: translateY(0);
 }
 
-.imageBox img {
-  width: 100%;
-  display: block;
+img {
+  width: 90%;
+  max-width: 500px;
+  border-radius: 20px;
+  transition: transform 1.5s ease;
+}
+
+/* Cinematic */
+.special.show img {
+  transform: scale(1.15);
+}
+
+.peak.show img {
+  animation: heartbeat 2s infinite;
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1.15); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1.15); }
 }
 
 .caption {
   margin-top: 20px;
   font-size: 18px;
-  opacity: 0;
-  transition: 1s ease;
+  text-align: center;
+  max-width: 90%;
 }
 
-.caption.show {
-  opacity: 1;
+/* Music Button */
+#musicBtn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  background: #ff8fab;
+  color: white;
 }
 
-/* 💌 LETTER */
+/* Letter */
 #letter {
-  display: none;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  padding: 30px;
+  backdrop-filter: blur(10px);
+}
+
+.letter-box {
+  background: rgba(255,255,255,0.7);
+  padding: 25px;
+  border-radius: 20px;
+  max-width: 90%;
+  line-height: 1.7;
+}
+
+/* Final */
+#final {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
   text-align: center;
 }
-
-.letterBox {
-  background: rgba(255,255,255,0.6);
-  backdrop-filter: blur(20px);
-  padding: 35px;
-  border-radius: 20px;
-  max-width: 700px;
-  line-height: 1.8;
-}
-
 </style>
 </head>
 
 <body>
-
-<!-- 🔒 PASSWORD -->
-<div id="lockscreen">
-  <div class="box">
+  
+  <div id="lockscreen">
+  <div class="lock-box">
     <h2>Enter Password 💌</h2>
-    <input type="password" id="pass">
-    <br><br>
+    <input type="password" id="passwordInput" placeholder="Enter password">
     <button onclick="unlock()">Unlock</button>
-    <p id="err"></p>
+    <p id="error" style="color:red;"></p>
   </div>
 </div>
 
-<!-- 💌 TAP SCREEN -->
-<div id="tapScreen">
-  <div class="box">
-    <h2>Tap to Open 💖</h2>
-    <button onclick="startExperience()">Open</button>
-  </div>
+<!-- 🎬 Intro -->
+<div id="landing">
+  <h1>For Ishitha ❤️</h1>
+  <div class="envelope" onclick="start()"></div>
+  <p>Tap to open</p>
+  <button id="musicBtn" onclick="playMusic()">Play Our Song 🎶</button>
 </div>
 
-<!-- 🎬 STORY -->
-<div id="storyContainer">
-  <div class="imageBox" id="imgBox">
-    <img id="img" src="">
-  </div>
-  <div class="caption" id="caption"></div>
-</div>
+<!-- 🎵 Music -->
+<iframe id="music" width="0" height="0"
+src="https://www.youtube.com/embed/rCoPr8UwRMc?enablejsapi=1"
+frameborder="0"></iframe>
 
-<!-- 💌 LETTER -->
-<div id="letter">
-  <div class="letterBox">
+<!-- Story -->
+<div id="story"></div>
+
+<!-- 💌 Letter -->
+<div id="letter" class="section">
+  <div class="letter-box">
     <p id="typedText"></p>
   </div>
 </div>
 
-<!-- 🎵 MUSIC -->
-<iframe id="music" width="0" height="0"
-src="https://www.youtube.com/embed/rCoPr8UwRMc"
-frameborder="0"></iframe>
+<!-- ❤️ Final -->
+<div id="final" class="section">
+  <p>
+    Happy Birthday, Ishitha ❤️<br><br>
+    Forever yours,<br>
+    ~ Your Loving Husband
+  </p>
+</div>
 
 <script>
-
-const images = [];
 const captions = [
 "Where it all started… ❤️",
 "A beginning we didn’t understand yet",
@@ -168,81 +224,198 @@ const captions = [
 "Our forever starts here"
 ];
 
+const story = document.getElementById("story");
+
 for(let i=1;i<=14;i++){
-  images.push(`img${i}.jpg`);
-}
+  const div = document.createElement("div");
 
-/* 🔐 PASSWORD */
-function unlock(){
-  const p = document.getElementById("pass").value;
-  if(p === "180110"){
-    document.getElementById("lockscreen").style.display = "none";
-    document.getElementById("tapScreen").style.display = "flex";
+  if([4,13].includes(i)){
+    div.className = "section special";
+  } else if([8,9].includes(i)){
+    div.className = "section peak";
   } else {
-    document.getElementById("err").innerText = "Wrong password ❤️";
+    div.className = "section";
   }
+
+  div.innerHTML = `
+    <img src="img${i}.jpg">
+    <div class="caption">${captions[i-1]}</div>
+  `;
+  story.appendChild(div);
 }
 
-/* 💌 START */
-function startExperience(){
+/* Start */
+function start(){
+  document.getElementById("landing").style.display = "none";
+}
 
-  document.getElementById("tapScreen").style.display = "none";
-
-  // 🎵 start music immediately
+/* Music */
+function playMusic(){
   document.getElementById("music").src += "&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
+}
 
-  let i = 0;
-
-  function showNext(){
-
-    if(i >= images.length){
-      startLetter();
-      return;
+/* Scroll Reveal */
+function reveal(){
+  document.querySelectorAll(".section").forEach(sec => {
+    const top = sec.getBoundingClientRect().top;
+    if(top < window.innerHeight - 100){
+      sec.classList.add("show");
     }
+  });
+}
+window.addEventListener("scroll", reveal);
 
-    const imgBox = document.getElementById("imgBox");
-    const img = document.getElementById("img");
-    const caption = document.getElementById("caption");
+/* Typing */
+const message = `Happy 20th Birthday, my love ❤️
 
-    img.src = images[i];
-    caption.innerText = captions[i];
+Another year, another chapter…
+and somehow, every time I sit to write for you,
+it feels like words still fall short.
 
-    imgBox.classList.add("show");
-    caption.classList.add("show");
+But today, I’ll try again—
+because you deserve to hear it, again and again.
 
+It still feels like yesterday—
+grade eight,
+that moment when you walked into the class…
+and unknowingly walked straight into my heart.
+
+That one "May I come in, ma’am?"
+still echoes somewhere inside me.
+
+I didn’t realize then
+that this simple moment
+would turn into a story so deep,
+so real,
+and so ours.
+
+From being those two innocent kids
+stealing glances…
+
+to becoming "us" after class nine…
+
+we’ve lived through everything—
+distance, silence, misunderstandings, pain…
+
+and yet,
+somehow,
+love always found its way back stronger.
+
+People say love fades with time,
+but what we have…
+
+it grew through every storm we faced.
+
+We were never perfect—
+but maybe that’s what made us real.
+
+When distance came,
+we learned how to feel without seeing.
+
+When silence came,
+our eyes spoke louder than words ever could.
+
+When things broke,
+we didn’t leave—
+we held on tighter.
+
+And that’s what makes us different.
+
+You’ve been so many things in my life—
+my girl, my peace, my strength.
+
+Sometimes you cared for me
+like no one else ever could…
+
+like I had a home in you.
+
+And somewhere along the way,
+that little girl from grade eight
+became my whole world.
+
+I know the journey hasn’t been easy for you.
+
+I’ve seen your pain,
+your struggles,
+the silent battles you’ve fought.
+
+And still,
+you stayed.
+Still, you loved.
+Still, you held my hand
+when it wasn’t easy.
+
+That strength of yours…
+I respect it more than I can ever express.
+
+This year,
+I don’t want you to carry any of the old pain with you.
+
+Let it go.
+Burn every memory that hurt you.
+
+You deserve a life
+that feels light, peaceful, and full of happiness.
+
+You deserve to smile without a reason,
+to live without fear,
+to love without holding back.
+
+I may not always be able to give you everything…
+
+but I promise you this—
+
+I’ll always give you
+my heart, my loyalty, and my presence.
+
+And I’ll keep proving, every day,
+that your trust in me was never wrong.
+
+"पानी में पत्थर मत फेंका करो, उसे भी कोई पीता है…  
+मरने की बात मत किया करो, तुम्हें देख कर भी कोई जीता है…"
+
+You are that reason someone lives.
+You are my reason.
+
+Happy Birthday, Ishitha.
+Happy 20th, my love ❤️
+
+Live it fully,
+smile endlessly,
+
+and never forget—
+you matter to me more than anything in this world.
+
+Forever yours,
+~ Your Loving Husband`;
+let i = 0;
+function typeLetter(){
+  if(i < message.length){
+    document.getElementById("typedText").innerHTML += message.charAt(i);
     i++;
-
-    setTimeout(()=>{
-      imgBox.classList.remove("show");
-      caption.classList.remove("show");
-      setTimeout(showNext, 800);
-    }, 5000);
+    setTimeout(typeLetter, 18);
   }
-
-  showNext();
 }
 
-/* 💌 LETTER */
-const message = `YOUR FULL LETTER HERE`;
-
-function startLetter(){
-  document.getElementById("storyContainer").style.display = "none";
-  document.getElementById("letter").style.display = "flex";
-
-  let i = 0;
-
-  function type(){
-    if(i < message.length){
-      document.getElementById("typedText").innerHTML += message[i];
-      i++;
-      setTimeout(type, 15);
-    }
+window.addEventListener("scroll", () => {
+  const letter = document.getElementById("letter");
+  if(letter.getBoundingClientRect().top < window.innerHeight - 100 && i===0){
+    typeLetter();
   }
+});
+  const correctPassword = "180110";
 
-  type();
+function unlock(){
+  const input = document.getElementById("passwordInput").value;
+
+  if(input === correctPassword){
+    document.getElementById("lockscreen").style.display = "none";
+  } else {
+    document.getElementById("error").innerText = "Wrong password ❤️";
+  }
 }
-
 </script>
 
 </body>
 </html>
+
