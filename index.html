@@ -10,161 +10,98 @@
 
 <style>
 
-/* 🌸 Background */
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(135deg, #ffd6e0, #e6d6ff);
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
-/* 🔒 Lock Screen */
-#lockscreen {
+/* 🔒 LOCK */
+#lockscreen, #tapScreen {
   position: fixed;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
+  inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  background: radial-gradient(circle, #ffd6e0, #e6d6ff);
   z-index: 9999;
+  text-align: center;
 }
 
-.lock-box {
+.box {
   background: rgba(255,255,255,0.7);
   backdrop-filter: blur(15px);
   padding: 30px;
   border-radius: 20px;
-  text-align: center;
 }
 
-.lock-box input {
-  padding: 10px;
-  margin-top: 10px;
-  width: 80%;
-  border-radius: 10px;
-  border: none;
-}
-
-.lock-box button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  border: none;
-  background: #ff8fab;
-  color: white;
-  border-radius: 20px;
-  cursor: pointer;
-}
-
-/* 🎬 Landing */
-#landing {
-  height: 100vh;
+/* 🎬 TAP SCREEN */
+#tapScreen {
   display: none;
+}
+
+/* 🖼 STORY */
+#storyContainer {
+  height: 100vh;
+  display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   text-align: center;
-}
-
-.envelope {
-  width: 200px;
-  height: 130px;
-  background: #ff8fab;
-  position: relative;
-  cursor: pointer;
-  border-radius: 10px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-  animation: float 3s ease-in-out infinite;
-}
-
-.envelope::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #ffb3c6;
-  clip-path: polygon(0 0, 50% 50%, 100% 0);
-}
-
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-/* 🎵 Music button */
-#musicBtn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: none;
-  background: #ff8fab;
-  color: white;
-  cursor: pointer;
-}
-
-/* 📖 Sections (hidden initially) */
-.section {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transform: translateY(60px);
-  transition: all 1s ease;
   padding: 20px;
 }
 
-.section.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* 🖼 FIXED IMAGE WRAPPER (IMPORTANT FIX) */
-.img-box {
+.imageBox {
   width: 90%;
-  max-width: 500px;
-  overflow: hidden;
+  max-width: 520px;
   border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 1s ease;
 }
 
-.img-box img {
+.imageBox.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.imageBox img {
   width: 100%;
   display: block;
-  transition: transform 1.5s ease;
 }
 
-.section.show .img-box img {
-  transform: scale(1.1);
-}
-
-/* ❤️ Caption (NO OVERLAP FIX) */
 .caption {
   margin-top: 20px;
   font-size: 18px;
-  text-align: center;
-  max-width: 90%;
+  opacity: 0;
+  transition: 1s ease;
 }
 
-/* 💌 Letter */
+.caption.show {
+  opacity: 1;
+}
+
+/* 💌 LETTER */
 #letter {
-  backdrop-filter: blur(10px);
-}
-
-.letter-box {
-  background: rgba(255,255,255,0.7);
-  padding: 25px;
-  border-radius: 20px;
-  max-width: 90%;
-  line-height: 1.7;
-}
-
-/* ❤️ Final */
-#final {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px;
+  display: none;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
   text-align: center;
+}
+
+.letterBox {
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(20px);
+  padding: 35px;
+  border-radius: 20px;
+  max-width: 700px;
+  line-height: 1.8;
 }
 
 </style>
@@ -172,51 +109,48 @@ body {
 
 <body>
 
-<!-- 🔒 LOCK -->
+<!-- 🔒 PASSWORD -->
 <div id="lockscreen">
-  <div class="lock-box">
+  <div class="box">
     <h2>Enter Password 💌</h2>
-    <input type="password" id="passwordInput">
+    <input type="password" id="pass">
+    <br><br>
     <button onclick="unlock()">Unlock</button>
-    <p id="error"></p>
+    <p id="err"></p>
   </div>
 </div>
 
-<!-- 🎬 LANDING -->
-<div id="landing">
-  <h1>For Ishitha ❤️</h1>
-  <div class="envelope" onclick="start()"></div>
-  <p>Tap to open</p>
-
-  <button id="musicBtn" onclick="playMusic()">Play Our Song 🎶</button>
+<!-- 💌 TAP SCREEN -->
+<div id="tapScreen">
+  <div class="box">
+    <h2>Tap to Open 💖</h2>
+    <button onclick="startExperience()">Open</button>
+  </div>
 </div>
 
-<!-- 🎵 MUSIC -->
-<iframe id="music" width="0" height="0"
-src="https://www.youtube.com/embed/rCoPr8UwRMc?enablejsapi=1"
-frameborder="0"></iframe>
-
-<!-- STORY -->
-<div id="story"></div>
+<!-- 🎬 STORY -->
+<div id="storyContainer">
+  <div class="imageBox" id="imgBox">
+    <img id="img" src="">
+  </div>
+  <div class="caption" id="caption"></div>
+</div>
 
 <!-- 💌 LETTER -->
-<div id="letter" class="section">
-  <div class="letter-box">
+<div id="letter">
+  <div class="letterBox">
     <p id="typedText"></p>
   </div>
 </div>
 
-<!-- ❤️ FINAL -->
-<div id="final" class="section">
-  <p>
-    Happy Birthday, Ishitha ❤️<br><br>
-    Forever yours,<br>
-    ~ Your Loving Husband
-  </p>
-</div>
+<!-- 🎵 MUSIC -->
+<iframe id="music" width="0" height="0"
+src="https://www.youtube.com/embed/rCoPr8UwRMc"
+frameborder="0"></iframe>
 
 <script>
 
+const images = [];
 const captions = [
 "Where it all started… ❤️",
 "A beginning we didn’t understand yet",
@@ -234,84 +168,78 @@ const captions = [
 "Our forever starts here"
 ];
 
-const story = document.getElementById("story");
-
-let started = false;
-
-/* ❗ IMPORTANT: images are NOT visible until start() */
 for(let i=1;i<=14;i++){
-
-  const div = document.createElement("div");
-  div.className = "section";
-
-  div.innerHTML = `
-    <div class="img-box">
-      <img src="img${i}.jpg">
-    </div>
-    <div class="caption">${captions[i-1]}</div>
-  `;
-
-  story.appendChild(div);
+  images.push(`img${i}.jpg`);
 }
-
-/* 🎬 START ONLY ON ENVELOPE CLICK */
-function start(){
-  if(started) return;
-  started = true;
-
-  document.getElementById("landing").style.display = "none";
-
-  reveal();
-}
-
-/* scroll reveal */
-function reveal(){
-  document.querySelectorAll(".section").forEach(sec=>{
-    const top = sec.getBoundingClientRect().top;
-    if(top < window.innerHeight - 100){
-      sec.classList.add("show");
-    }
-  });
-}
-
-window.addEventListener("scroll", reveal);
-
-/* 🎵 MUSIC FIXED */
-function playMusic(){
-  document.getElementById("music").src += "&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
-}
-
-/* 💌 FULL LETTER (UNCHANGED - KEEP YOUR ORIGINAL HERE) */
-const message = `YOUR FULL LETTER HERE`;
-
-let i = 0;
-function typeLetter(){
-  if(i < message.length){
-    document.getElementById("typedText").innerHTML += message.charAt(i);
-    i++;
-    setTimeout(typeLetter, 18);
-  }
-}
-
-window.addEventListener("scroll", ()=>{
-  const letter = document.getElementById("letter");
-  if(letter.getBoundingClientRect().top < window.innerHeight - 100 && i===0){
-    typeLetter();
-  }
-});
 
 /* 🔐 PASSWORD */
-const correctPassword = "180110";
-
 function unlock(){
-  const input = document.getElementById("passwordInput").value;
-
-  if(input === correctPassword){
+  const p = document.getElementById("pass").value;
+  if(p === "180110"){
     document.getElementById("lockscreen").style.display = "none";
-    document.getElementById("landing").style.display = "flex";
+    document.getElementById("tapScreen").style.display = "flex";
   } else {
-    document.getElementById("error").innerText = "Wrong password ❤️";
+    document.getElementById("err").innerText = "Wrong password ❤️";
   }
+}
+
+/* 💌 START */
+function startExperience(){
+
+  document.getElementById("tapScreen").style.display = "none";
+
+  // 🎵 start music immediately
+  document.getElementById("music").src += "&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
+
+  let i = 0;
+
+  function showNext(){
+
+    if(i >= images.length){
+      startLetter();
+      return;
+    }
+
+    const imgBox = document.getElementById("imgBox");
+    const img = document.getElementById("img");
+    const caption = document.getElementById("caption");
+
+    img.src = images[i];
+    caption.innerText = captions[i];
+
+    imgBox.classList.add("show");
+    caption.classList.add("show");
+
+    i++;
+
+    setTimeout(()=>{
+      imgBox.classList.remove("show");
+      caption.classList.remove("show");
+      setTimeout(showNext, 800);
+    }, 5000);
+  }
+
+  showNext();
+}
+
+/* 💌 LETTER */
+const message = `YOUR FULL LETTER HERE`;
+
+function startLetter(){
+  document.getElementById("storyContainer").style.display = "none";
+  document.getElementById("letter").style.display = "flex";
+
+  let i = 0;
+
+  function type(){
+    if(i < message.length){
+      document.getElementById("typedText").innerHTML += message[i];
+      i++;
+      setTimeout(type, 15);
+    }
+  }
+
+  type();
 }
 
 </script>
