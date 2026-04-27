@@ -7,8 +7,48 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Playfair+Display&display=swap" rel="stylesheet">
 
-<style>
+<style #lockscreen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.lock-box {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.lock-box input {
+  padding: 10px;
+  margin-top: 10px;
+  width: 80%;
+  border-radius: 10px;
+}
+
+.lock-box button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  background: #ff8fab;
+  color: white;
+  border-radius: 20px;
+}>
 body {
+  <div id="lockscreen">
+  <div class="lock-box">
+    <h2>Enter Password 💌</h2>
+    <input type="password" id="passwordInput" placeholder="Enter password">
+    <button onclick="unlock()">Unlock</button>
+    <p id="error" style="color:red;"></p>
+  </div>
+</div>
   margin: 0;
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
@@ -359,6 +399,17 @@ window.addEventListener("scroll", () => {
     typeLetter();
   }
 });
+  const correctPassword = "29042006";
+
+function unlock(){
+  const input = document.getElementById("passwordInput").value;
+
+  if(input === correctPassword){
+    document.getElementById("lockscreen").style.display = "none";
+  } else {
+    document.getElementById("error").innerText = "Try again ❤️";
+  }
+}
 </script>
 
 </body>
