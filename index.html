@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Ishitha ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins&family=Playfair+Display&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
+  overflow-x: hidden;
+}
+
+/* 🎬 Envelope Intro */
+#landing {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.envelope {
+  width: 200px;
+  height: 130px;
+  background: #ff8fab;
+  position: relative;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.envelope::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #ffb3c6;
+  clip-path: polygon(0 0, 50% 50%, 100% 0);
+  top: 0;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Sections */
+.section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 1s ease;
+  padding: 20px;
+}
+
+.section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+img {
+  width: 90%;
+  max-width: 500px;
+  border-radius: 20px;
+  transition: transform 1.5s ease;
+}
+
+/* Cinematic */
+.special.show img {
+  transform: scale(1.15);
+}
+
+.peak.show img {
+  animation: heartbeat 2s infinite;
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1.15); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1.15); }
+}
+
+.caption {
+  margin-top: 20px;
+  font-size: 18px;
+  text-align: center;
+  max-width: 90%;
+}
+
+/* Music Button */
+#musicBtn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  background: #ff8fab;
+  color: white;
+}
+
+/* Letter */
+#letter {
+  backdrop-filter: blur(10px);
+}
+
+.letter-box {
+  background: rgba(255,255,255,0.7);
+  padding: 25px;
+  border-radius: 20px;
+  max-width: 90%;
+  line-height: 1.7;
+}
+
+/* Final */
+#final {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎬 Intro -->
+<div id="landing">
+  <h1>For Ishitha ❤️</h1>
+  <div class="envelope" onclick="start()"></div>
+  <p>Tap to open</p>
+  <button id="musicBtn" onclick="playMusic()">Play Our Song 🎶</button>
+</div>
+
+<!-- 🎵 Music -->
+<iframe id="music" width="0" height="0"
+src="https://www.youtube.com/embed/rCoPr8UwRMc?enablejsapi=1"
+frameborder="0"></iframe>
+
+<!-- Story -->
+<div id="story"></div>
+
+<!-- 💌 Letter -->
+<div id="letter" class="section">
+  <div class="letter-box">
+    <p id="typedText"></p>
+  </div>
+</div>
+
+<!-- ❤️ Final -->
+<div id="final" class="section">
+  <p>
+    Happy Birthday, Ishitha ❤️<br><br>
+    Forever yours,<br>
+    ~ Your Loving Husband
+  </p>
+</div>
+
+<script>
+const captions = [
+"Where it all started… ❤️",
+"A beginning we didn’t understand yet",
+"Slowly… you became important",
+"Somewhere here… it became real ❤️",
+"You became my comfort",
+"Moments I never want to lose",
+"You became my peace",
+"This is where I knew ❤️",
+"You’re my forever",
+"Every moment with you matters",
+"You and me against everything",
+"Still choosing you",
+"Even unreal moments feel real ❤️",
+"Our forever starts here"
+];
+
+const story = document.getElementById("story");
+
+for(let i=1;i<=14;i++){
+  const div = document.createElement("div");
+
+  if([4,13].includes(i)){
+    div.className = "section special";
+  } else if([8,9].includes(i)){
+    div.className = "section peak";
+  } else {
+    div.className = "section";
+  }
+
+  div.innerHTML = `
+    <img src="images/img${i}.jpg">
+    <div class="caption">${captions[i-1]}</div>
+  `;
+  story.appendChild(div);
+}
+
+/* Start */
+function start(){
+  document.getElementById("landing").style.display = "none";
+}
+
+/* Music */
+function playMusic(){
+  document.getElementById("music").src += "&autoplay=1&loop=1&playlist=rCoPr8UwRMc";
+}
+
+/* Scroll Reveal */
+function reveal(){
+  document.querySelectorAll(".section").forEach(sec => {
+    const top = sec.getBoundingClientRect().top;
+    if(top < window.innerHeight - 100){
+      sec.classList.add("show");
+    }
+  });
+}
+window.addEventListener("scroll", reveal);
+
+/* Typing */
+const message = `Happy 20th Birthday, my love ❤️
+Another year, another chapter… and somehow, every time I sit to write for you, it feels like words still fall short. But today, I’ll try again—because you deserve to hear it, again and again.
+It still feels like yesterday—grade eight, that moment when you walked into the class… and unknowingly walked straight into my heart. That one “May I come in, ma’am?” still echoes somewhere inside me. I didn’t realize then that this simple moment would turn into a story so deep, so real, and so ours.
+From being those two innocent kids stealing glances, to becoming “us” after class nine… we’ve lived through everything—distance, silence, misunderstandings, pain, and yet, somehow, love always found its way back stronger. People say love fades with time, but what we have… it grew through every storm we faced.
+We were never perfect—but maybe that’s what made us real. When distance came, we learned how to feel without seeing. When silence came, our eyes spoke louder than words ever could. When things broke, we didn’t leave—we held on tighter. And that’s what makes us different.
+You’ve been so many things in my life—my girl, my peace, my strength. Sometimes you cared for me like no one else ever could, like I had a home in you. And somewhere along the way, that little girl from grade eight became my whole world.
+I know the journey hasn’t been easy for you. I’ve seen your pain, your struggles, the silent battles you’ve fought. And still, you stayed. Still, you loved. Still, you held my hand when it wasn’t easy. That strength of yours… I respect it more than I can ever express.
+This year, I don’t want you to carry any of the old pain with you. Let it go. Burn every memory that hurt you. You deserve a life that feels light, peaceful, and full of happiness. You deserve to smile without a reason, to live without fear, to love without holding back.
+I may not always be able to give you everything, not gifts, not grand things… but I promise you this—I’ll always give you my heart, my loyalty, and my presence. And I’ll keep proving, every day, that your trust in me was never wrong.
+“पानी में पत्थर मत फेंका करो, उसे भी कोई पीता है… मरने की बात मत किया करो, तुम्हें देख कर भी कोई जीता है…”
+You are that reason someone lives. You are my reason.
+Happy Birthday, Ishitha. Happy 20th, my love ❤️ Live it fully, smile endlessly, and never forget—you matter, to me more than anything in this world.
+Forever yours, ~ Your Loving Husband`;
+
+let i = 0;
+function typeLetter(){
+  if(i < message.length){
+    document.getElementById("typedText").innerHTML += message.charAt(i);
+    i++;
+    setTimeout(typeLetter, 18);
+  }
+}
+
+window.addEventListener("scroll", () => {
+  const letter = document.getElementById("letter");
+  if(letter.getBoundingClientRect().top < window.innerHeight - 100 && i===0){
+    typeLetter();
+  }
+});
+</script>
+
+</body>
+</html>
