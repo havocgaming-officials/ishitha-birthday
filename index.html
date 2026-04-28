@@ -257,13 +257,19 @@ function start(){
   let i = 0;
 
   function next(){
-    if(i >= sections.length - 1){
-      startLetter();
-      return;
-    }
 
+    // show current section
     sections[i].classList.add("show");
     sections[i].scrollIntoView({behavior:"smooth", block:"center"});
+
+    // if this was the LAST image
+    if(i === sections.length - 1){
+      // after its 10s, move to letter seamlessly
+      setTimeout(() => {
+        startLetter();
+      }, 10000);
+      return;
+    }
 
     i++;
     setTimeout(next, 10000);
@@ -414,7 +420,7 @@ function startLetter(){
   letter.classList.add("show");
   letter.scrollIntoView({behavior:"smooth", block:"center"});
 
-  typeLetter(); // starts EXACTLY when scroll starts
+  typeLetter();
 }
 
 </script>
