@@ -22,7 +22,7 @@ body.unlocked {
   overflow-y: auto;
 }
 
-/* ❤️ HEARTS */
+/* ❤️ HEARTS (FIXED + BACKGROUND ONLY) */
 .hearts {
   position: fixed;
   inset: 0;
@@ -148,8 +148,10 @@ img {
 
 <body class="locked">
 
+<!-- ❤️ HEARTS -->
 <div class="hearts"></div>
 
+<!-- LOCK -->
 <div id="lockscreen">
   <div class="lock-box">
     <h2>Enter Password 💌</h2>
@@ -159,24 +161,29 @@ img {
   </div>
 </div>
 
+<!-- ENVELOPE -->
 <div id="landing">
   <h1>For Ishitha ❤️</h1>
   <div class="envelope" onclick="start()"></div>
   <p>Tap envelope</p>
 </div>
 
+<!-- MUSIC -->
 <audio id="music" loop preload="auto">
   <source src="waalian.mp3" type="audio/mpeg">
 </audio>
 
+<!-- STORY -->
 <div id="story"></div>
 
+<!-- LETTER -->
 <div id="letter" class="section">
   <div class="letter-box">
     <p id="typedText"></p>
   </div>
 </div>
 
+<!-- FINAL -->
 <div id="final" class="section">
   <p>Happy Birthday Ishitha ❤️<br><br>
     Forever yours,<br>
@@ -205,13 +212,16 @@ function unlock(){
   const val = document.getElementById("passwordInput").value;
 
   if(val === "180110"){
+
     document.getElementById("lockscreen").style.display = "none";
     document.body.classList.remove("locked");
     document.body.classList.add("unlocked");
 
     const music = document.getElementById("music");
     music.currentTime = 0;
+
     music.play().catch(()=>{});
+
   } else {
     document.getElementById("error").innerText = "Wrong password ❤️";
   }
@@ -219,6 +229,7 @@ function unlock(){
 
 /* STORY */
 const captions = [
+  
 "Where it all started… ❤️",
 "A beginning we didn’t understand yet",
 "Slowly… you became important",
@@ -233,6 +244,7 @@ const captions = [
 "Still choosing you",
 "Even unreal moments feel real ❤️",
 "Our forever starts here"
+
 ];
 
 const story = document.getElementById("story");
@@ -249,7 +261,7 @@ for(let i=1;i<=14;i++){
   story.appendChild(div);
 }
 
-/* FLOW */
+/* FLOW (10 sec now) */
 function start(){
   document.getElementById("landing").style.display = "none";
 
@@ -257,28 +269,22 @@ function start(){
   let i = 0;
 
   function next(){
-
-    // show current section
-    sections[i].classList.add("show");
-    sections[i].scrollIntoView({behavior:"smooth", block:"center"});
-
-    // if this was the LAST image
-    if(i === sections.length - 1){
-      // after its 10s, move to letter seamlessly
-      setTimeout(() => {
-        startLetter();
-      }, 10000);
+    if(i >= sections.length - 1){
+      startLetter();
       return;
     }
 
+    sections[i].classList.add("show");
+    sections[i].scrollIntoView({behavior:"smooth", block:"center"});
+
     i++;
-    setTimeout(next, 10000);
+    setTimeout(next, 10000); // ⏱ 10 seconds
   }
 
   next();
 }
 
-/* LETTER */
+/* LETTER (SLOWER + READABLE) */
 const message = `Happy 20th Birthday, my love ❤️
 
 Another year, another chapter…
@@ -404,7 +410,7 @@ let i = 0;
 function typeLetter(){
   if(i < message.length){
     document.getElementById("typedText").innerHTML += message.charAt(i++);
-    setTimeout(typeLetter, 35);
+    setTimeout(typeLetter, 35); // ✍️ slower typing
   } else {
     setTimeout(()=>{
       document.getElementById("final").classList.add("show");
@@ -413,13 +419,8 @@ function typeLetter(){
   }
 }
 
-/* ✅ FINAL FIX */
 function startLetter(){
-  const letter = document.getElementById("letter");
-
-  letter.classList.add("show");
-  letter.scrollIntoView({behavior:"smooth", block:"center"});
-
+  document.getElementById("letter").classList.add("show");
   typeLetter();
 }
 
