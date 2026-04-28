@@ -9,6 +9,7 @@
 
 <style>
 
+/* LOCK + GLOBAL SCROLL FIX */
 html, body {
   height: 100%;
   margin: 0;
@@ -21,12 +22,13 @@ body.unlocked {
   overflow-y: auto;
 }
 
-/* ❤️ HEARTS */
+/* ❤️ HEARTS (FIXED + BACKGROUND ONLY) */
 .hearts {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
+  overflow: hidden;
 }
 
 .hearts span {
@@ -34,6 +36,7 @@ body.unlocked {
   bottom: -50px;
   color: rgba(255, 90, 130, 0.45);
   animation: floatUp 12s linear infinite;
+  text-shadow: 0 0 8px rgba(255, 100, 140, 0.3);
 }
 
 @keyframes floatUp {
@@ -49,8 +52,8 @@ body.unlocked {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
   background: linear-gradient(to bottom, #ffd6e0, #e6d6ff);
+  z-index: 9999;
 }
 
 .lock-box {
@@ -75,7 +78,19 @@ body.unlocked {
   height: 150px;
   background: linear-gradient(135deg, #ff6f91, #ff8fab);
   border-radius: 12px;
+  position: relative;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
   cursor: pointer;
+}
+
+.envelope::before {
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  border-left:115px solid transparent;
+  border-right:115px solid transparent;
+  border-top:75px solid #ffb3c6;
 }
 
 /* SECTIONS */
@@ -85,10 +100,9 @@ body.unlocked {
   flex-direction:column;
   justify-content:center;
   align-items:center;
-
   opacity:0;
-  transform:translateY(40px);
-  transition:1.2s ease;
+  transform:translateY(60px);
+  transition:1s ease;
   padding:20px;
   z-index:2;
 }
@@ -98,26 +112,19 @@ body.unlocked {
   transform:translateY(0);
 }
 
-/* IMAGE FADE EFFECT */
-.section img {
+/* IMAGE */
+img {
   width:90%;
   max-width:520px;
   border-radius:24px;
   box-shadow:0 15px 40px rgba(0,0,0,0.25);
-
-  opacity:0;
-  transform: scale(1.05);
-  transition: opacity 1.2s ease, transform 1.2s ease;
-}
-
-.section.show img {
-  opacity:1;
-  transform: scale(1);
+  transition:2s ease;
 }
 
 .caption {
   margin-top:15px;
   text-align:center;
+  font-size:18px;
 }
 
 /* LETTER */
@@ -129,15 +136,11 @@ body.unlocked {
   line-height:1.7;
 }
 
+/* FINAL */
 #final {
   font-family:'Playfair Display', serif;
   font-size:24px;
   text-align:center;
-}
-
-/* LOCKED BODY */
-body.locked {
-  overflow:hidden;
 }
 
 </style>
@@ -145,6 +148,7 @@ body.locked {
 
 <body class="locked">
 
+<!-- ❤️ HEARTS -->
 <div class="hearts"></div>
 
 <!-- LOCK -->
@@ -157,7 +161,7 @@ body.locked {
   </div>
 </div>
 
-<!-- LANDING -->
+<!-- ENVELOPE -->
 <div id="landing">
   <h1>For Ishitha ❤️</h1>
   <div class="envelope" onclick="start()"></div>
@@ -165,7 +169,7 @@ body.locked {
 </div>
 
 <!-- MUSIC -->
-<audio id="music" loop>
+<audio id="music" loop preload="auto">
   <source src="waalian.mp3" type="audio/mpeg">
 </audio>
 
@@ -188,14 +192,16 @@ body.locked {
 
 <script>
 
-/* HEARTS */
+/* ❤️ HEARTS */
 function createHearts(){
   const hearts = document.querySelector(".hearts");
+
   for(let i=0;i<25;i++){
     const s = document.createElement("span");
     s.innerHTML = "❤️";
     s.style.left = Math.random()*100 + "vw";
     s.style.animationDuration = (8 + Math.random()*6) + "s";
+    s.style.fontSize = (14 + Math.random()*20) + "px";
     hearts.appendChild(s);
   }
 }
@@ -206,17 +212,22 @@ function unlock(){
   const val = document.getElementById("passwordInput").value;
 
   if(val === "180110"){
+
     document.getElementById("lockscreen").style.display = "none";
     document.body.classList.remove("locked");
     document.body.classList.add("unlocked");
 
-    document.getElementById("music").play().catch(()=>{});
+    const music = document.getElementById("music");
+    music.currentTime = 0;
+
+    music.play().catch(()=>{});
+
   } else {
     document.getElementById("error").innerText = "Wrong password ❤️";
   }
 }
 
-/* STORY DATA */
+/* STORY */
 const captions = [
 "Where it all started… ❤️",
 "A beginning we didn’t understand yet",
@@ -245,32 +256,30 @@ for(let i=1;i<=11;i++){
   story.appendChild(div);
 }
 
-/* FINAL SEQUENTIAL FLOW */
+/* FLOW (10 sec now) */
 function start(){
   document.getElementById("landing").style.display = "none";
 
   const sections = document.querySelectorAll(".section");
   let i = 0;
 
-  function showNext(){
-
-    if(i < sections.length){
-      sections[i].classList.add("show");
-      sections[i].scrollIntoView({behavior:"smooth", block:"center"});
-
-      i++;
-      setTimeout(showNext, 10000); // 10s per image
+  function next(){
+    if(i >= sections.length - 1){
+      startLetter();
+      return;
     }
-    else {
-      // cinematic pause before letter
-      setTimeout(startLetter, 1500);
-    }
+
+    sections[i].classList.add("show");
+    sections[i].scrollIntoView({behavior:"smooth", block:"center"});
+
+    i++;
+    setTimeout(next, 10000); // ⏱ 10 seconds
   }
 
-  showNext();
+  next();
 }
 
-/* TYPING LETTER */
+/* LETTER (SLOWER + READABLE) */
 const message = `Happy 20th Birthday, my love ❤️
 
 Another year, another chapter…
@@ -390,17 +399,18 @@ smile endlessly,
 
 and never forget—
 you matter to me more than anything in this world.`;
+
 let i = 0;
 
 function typeLetter(){
   if(i < message.length){
     document.getElementById("typedText").innerHTML += message.charAt(i++);
-    setTimeout(typeLetter, 35);
+    setTimeout(typeLetter, 35); // ✍️ slower typing
   } else {
     setTimeout(()=>{
       document.getElementById("final").classList.add("show");
       document.getElementById("final").scrollIntoView({behavior:"smooth"});
-    }, 1000);
+    }, 1200);
   }
 }
 
