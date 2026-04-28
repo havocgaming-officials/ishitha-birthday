@@ -409,7 +409,7 @@ let i = 0;
 function typeLetter(){
   if(i < message.length){
     document.getElementById("typedText").innerHTML += message.charAt(i++);
-    setTimeout(typeLetter, 35); // ✍️ slower typing
+    setTimeout(typeLetter, 18); // ✍️ slower typing
   } else {
     setTimeout(()=>{
       document.getElementById("final").classList.add("show");
