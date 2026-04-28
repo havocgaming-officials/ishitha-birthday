@@ -406,28 +406,22 @@ and never forget—
 you matter to me more than anything in this world.`;
 
 let i = 0;
+
 function typeLetter(){
   if(i < message.length){
-    document.getElementById("typedText").innerHTML += message.charAt(i);
-    i++;
-    setTimeout(typeLetter, 18);
+    document.getElementById("typedText").innerHTML += message.charAt(i++);
+    setTimeout(typeLetter, 35); // ✍️ slower typing
+  } else {
+    setTimeout(()=>{
+      document.getElementById("final").classList.add("show");
+      document.getElementById("final").scrollIntoView({behavior:"smooth"});
+    }, 1200);
   }
 }
 
-window.addEventListener("scroll", () => {
-  const letter = document.getElementById("letter");
-  if(letter.getBoundingClientRect().top < window.innerHeight - 100 && i===0){
-    typeLetter();
-  }
-});
-
-/* PASSWORD */
-function unlock(){
-  if(document.getElementById("passwordInput").value === "180110"){
-    document.getElementById("lockscreen").style.display = "none";
-  } else {
-    document.getElementById("error").innerText = "Wrong password ❤️";
-  }
+function startLetter(){
+  document.getElementById("letter").classList.add("show");
+  typeLetter();
 }
 
 </script>
